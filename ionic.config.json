@@ -1,0 +1,7 @@
+{
+  "name": "VaMUS",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
