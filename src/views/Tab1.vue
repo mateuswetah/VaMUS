@@ -12,17 +12,46 @@
         </ion-toolbar>
       </ion-header>
     
-      <ExploreContainer name="Tab 1 page" />
+      <ion-list>
+        <ion-item 
+            v-for="(collection, index) of collections"
+            :key="index">
+          {{ collection.name }}
+        </ion-item>
+      </ion-list>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
+import { defineComponent } from 'vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, loadingController } from '@ionic/vue';
+import { mapActions, mapGetters } from 'vuex';
 
-export default  {
+export default defineComponent({
   name: 'Tab1',
-  components: { ExploreContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
-}
+  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonList, IonItem },
+  computed: {
+    ...mapGetters('collection', {
+        collections: 'getCollections'
+    })
+  },
+  async mounted() {
+    const loading = await loadingController
+      .create({
+        message: 'Carregando coleções...',
+      });
+
+    await loading.present();
+
+    this.fetchCollections()
+      .then(() => loading.dismiss())
+      .catch(() => loading.dismiss());
+  },
+  methods: {
+    ...mapActions('collection', [
+        'fetchCollections'
+    ]), 
+  }
+})
 </script>

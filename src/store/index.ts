@@ -1,12 +1,13 @@
 import { createStore } from 'vuex'
 
+import item from './modules/item';
+import collection from './modules/collection';
+import search from './modules/search';
+
 export default createStore({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
+    modules: {
+      item,
+      collection,
+      search
   }
 })
