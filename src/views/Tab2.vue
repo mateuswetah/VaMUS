@@ -12,17 +12,47 @@
         </ion-toolbar>
       </ion-header>
       
-      <ExploreContainer name="Tab 2 page" />
+      <div id="mapId" style="width: 100%; height: 100%" />
+
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
+import * as L from 'leaflet';
 
-export default  {
+export default defineComponent({
   name: 'Tab2',
-  components: { ExploreContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
-}
+  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage },
+  data(): {
+    map: L.Map | undefined; 
+  } {
+    return {
+      map: undefined
+    }
+  },
+  mounted() {
+    this.initializeMap();
+  },
+  beforeDestroy() {
+    // this.map.remove();
+  },
+  methods: {
+    initializeMap() {
+      this.map = L.map('mapId').setView([-15.809365, -49.521065], 5);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'edupala.com © Angular LeafLet',
+      })
+        .addTo(this.map);
+
+      L.marker([-15.80, -49.52])
+        .addTo(this.map)
+        .bindPopup('Algum museu')
+        .openPopup();
+    }
+  }
+});
 </script>
