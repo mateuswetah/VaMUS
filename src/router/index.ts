@@ -28,7 +28,11 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/collection/:collectionId',
     component: () => import('@/views/Collection.vue')
-  }
+  },
+  {
+    path: '/institution/:institutionId',
+    component: () => import('@/views/Institution.vue')
+  },
 ]
 
 const router = createRouter({
