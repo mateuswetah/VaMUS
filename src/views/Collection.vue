@@ -44,38 +44,9 @@
                 </div>
                 <div v-if="currentSegment === 'items'">
                     <ion-list>
-                        <ion-item-group>
-                            <ion-item-divider>
-                                <ion-label>Itens</ion-label>
-                                <ion-note slot="end">{{ totalItems }}</ion-note>
-                            </ion-item-divider>
-                            <ion-grid>
-                                <ion-row v-if="!isLoadingItems">
-                                    <ion-col
-                                        size="4"
-                                        v-for="(item, index) of items"
-                                        :key="index"
-                                    >
-                                        <ion-img
-                                            v-if="
-                                                item.thumbnail &&
-                                                item.thumbnail.thumbnail &&
-                                                item.thumbnail.thumbnail[0]
-                                            "
-                                            :src="item.thumbnail.thumbnail[0]"
-                                        />
-                                        <ion-label>{{ item.title }}</ion-label>
-                                    </ion-col>
-                                </ion-row>
-                                <ion-row v-else>
-                                    <ion-col size="4" v-for="n in 12" :key="n">
-                                        <ion-skeleton-text
-                                            style="min-height: 31vw"
-                                        ></ion-skeleton-text>
-                                    </ion-col>
-                                </ion-row>
-                            </ion-grid>
-                        </ion-item-group>
+                        <items-list 
+                                is-collection-items-list
+                                :is-loading-items="isLoadingItems" />
                     </ion-list>
                 </div>
             </div>
@@ -99,14 +70,9 @@ import {
     IonSegmentButton,
     IonLabel,
     IonList,
-    IonImg,
-    IonItemGroup,
-    IonItemDivider,
-    IonGrid,
-    IonCol,
-    IonRow,
-    IonNote
+    IonImg
 } from "@ionic/vue";
+import ItemsList from '@/components/items-list.vue'
 
 export default defineComponent({
     name: 'CollectionPage',
@@ -124,12 +90,7 @@ export default defineComponent({
         IonLabel,
         IonList,
         IonImg,
-        IonItemGroup,
-        IonItemDivider,
-        IonGrid,
-        IonCol,
-        IonRow,
-        IonNote
+        ItemsList
     },
     data() {
         return {
@@ -142,11 +103,7 @@ export default defineComponent({
     computed: {
         ...mapGetters("collection", {
             collection: "getCollection",
-        }),
-        ...mapGetters("item", {
-            items: "getCollectionItems",
-            totalItems: "getCollectionTotalItems",
-        }),
+        })
     },
     mounted() {
         this.collectionId = '' + this.$route.params.collectionId;
@@ -163,7 +120,7 @@ export default defineComponent({
         segmentChanged(ev: CustomEvent) {
             this.currentSegment = ev.detail.value;
 
-            if (this.currentSegment === 'items' && !this.items.lenght) {
+            if (this.currentSegment === 'items') {
                 // Load items
                 this.isLoadingItems = true;
                 this.fetchCollectionItems({ collectionId: this.collectionId, params: { orderby: 'relevance' }})

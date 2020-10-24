@@ -13,38 +13,8 @@
             </ion-header>
 
             <ion-list>
-                <ion-item-group>
-                    <ion-item-divider>
-                        <ion-label>Itens</ion-label>
-                        <ion-note slot="end">{{ totalItems }}</ion-note>
-                    </ion-item-divider>
-                    <ion-grid>
-                        <ion-row>
-                            <ion-col
-                                size="4"
-                                v-for="(item, index) of items"
-                                :key="index"
-                            >
-                                <ion-img
-                                    v-if="
-                                        item.thumbnail &&
-                                        item.thumbnail.thumbnail &&
-                                        item.thumbnail.thumbnail[0]
-                                    "
-                                    :src="item.thumbnail.thumbnail[0]"
-                                />
-                                <ion-label>{{ item.title }}</ion-label>
-                            </ion-col>
-                        </ion-row>
-                        <ion-row v-if="isLoadingItems">
-                            <ion-col size="4" v-for="n in 6" :key="n">
-                                <ion-skeleton-text
-                                    style="min-height: 31vw"
-                                ></ion-skeleton-text>
-                            </ion-col>
-                        </ion-row>
-                    </ion-grid>
-                </ion-item-group>
+                
+                <items-list :is-loading-items="isLoadingItems" />
 
                 <ion-item-group>
                     <ion-item-divider>
@@ -124,13 +94,11 @@ import {
     IonItemDivider,
     IonSkeletonText,
     IonItemGroup,
-    IonGrid,
-    IonCol,
-    IonRow,
     IonNote
 } from "@ionic/vue";
 import { mapActions, mapGetters } from "vuex";
 import { useRouter } from 'vue-router';
+import ItemsList from '@/components/items-list.vue'
 
 export default defineComponent({
     name: "List",
@@ -148,10 +116,8 @@ export default defineComponent({
         IonItemDivider,
         IonThumbnail,
         IonSkeletonText,
-        IonGrid,
-        IonCol,
-        IonRow,
-        IonNote
+        IonNote,
+        ItemsList
     },
     setup() {
       const router = useRouter();
@@ -167,10 +133,6 @@ export default defineComponent({
         ...mapGetters("collection", {
             collections: "getCollections",
             totalCollections: "getTotalCollections",
-        }),
-        ...mapGetters("item", {
-            items: "getItems",
-            totalItems: "getTotalItems",
         }),
     },
     mounted() {
