@@ -9,5 +9,5 @@ export default createStore({
       item,
       collection,
       institute
-  }
+  },
 })

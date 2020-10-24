@@ -19,3 +19,7 @@ export const setInstituteCollections = (state: any, instituteCollections: [] ) =
 export const setTotalInstituteCollections = (state: any, totalInstituteCollections: number ) => {
     state.totalInstituteCollections = totalInstituteCollections;
 }
+
+export const setInstitutesIds = (state: any, institutesIds: [ number ] ) => {
+    state.institutesIds = institutesIds;
+}

@@ -5,9 +5,6 @@
                 <ion-buttons slot="start">
                     <ion-back-button></ion-back-button>
                 </ion-buttons>
-                <span v-if="!isLoadingInstitute">
-                    imagem capa: {{institute["@files:header"]?.url}}
-                </span>
                 <ion-title v-if="!isLoadingInstitute">
                     {{ institute.name ? institute.name : 'Instituição' }}
                 </ion-title>
@@ -24,6 +21,11 @@
                     <ion-skeleton-text v-else animated />
                 </ion-toolbar>
             </ion-header>
+
+            <ion-img
+                v-if="institute['@files:header']?.url"
+                :src="institute['@files:header']?.url"
+            />
 
             <div>
                 <ion-segment :value="currentSegment" @ionChange="segmentChanged($event)">
@@ -110,6 +112,7 @@ import {
     IonSegmentButton,
     IonLabel,
 } from "@ionic/vue";
+import CollectionsList from '@/components/CollectionsList.vue'
 
 export default defineComponent({
     name: 'InstitutePage',
@@ -125,6 +128,7 @@ export default defineComponent({
         IonSegment,
         IonSegmentButton,
         IonLabel,
+        CollectionsList
     },
     data() {
         return {

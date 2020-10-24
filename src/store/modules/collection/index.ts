@@ -8,7 +8,8 @@ const state = {
     collections: Array<CollectionModel>(),
     totalCollections: 0,
     instituteCollections: Array<CollectionModel>(),
-    totalInstituteCollections: 0
+    totalInstituteCollections: 0,
+    institutesIds: Array<number>()
 };
 
 export default {

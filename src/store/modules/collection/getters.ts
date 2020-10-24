@@ -17,3 +17,7 @@ export const getInstituteCollections = (state: any) => {
 export const getInstituteTotalCollections = (state: any) => {
     return state.totalInstituteCollections;
 }
+
+export const getInstitutesIds = (state: any) => {
+    return state.institutesIds;
+}

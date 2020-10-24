@@ -1,10 +1,12 @@
 import * as actions from './actions';
 import * as getters from './getters';
-import InstituteModel from './models';
 import * as mutations from './mutations';
+import InstituteModel from './models';
 
 const state = {
-    institute: InstituteModel
+    institute: InstituteModel,
+    institutes: Array<InstituteModel>(),
+    totalInstitutes: 0
 };
 
 export default {
