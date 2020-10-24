@@ -9,3 +9,11 @@ export const getCollections = (state: any) => {
 export const getTotalCollections = (state: any) => {
     return state.totalCollections;
 }
+
+export const getInstituteCollections = (state: any) => {
+    return state.instituteCollections;
+}
+
+export const getInstituteTotalCollections = (state: any) => {
+    return state.totalInstituteCollections;
+}

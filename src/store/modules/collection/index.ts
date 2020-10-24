@@ -4,9 +4,11 @@ import * as mutations from './mutations';
 import CollectionModel from './models';
 
 const state = {
-    collections: Array<CollectionModel>(),
     collection: new CollectionModel(),
-    totalCollections: 0
+    collections: Array<CollectionModel>(),
+    totalCollections: 0,
+    instituteCollections: Array<CollectionModel>(),
+    totalInstituteCollections: 0
 };
 
 export default {
