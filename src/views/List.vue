@@ -2,13 +2,13 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Tab 1</ion-title>
+        <ion-title>VaMUS</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Tab 1</ion-title>
+          <ion-title size="large">Listagem</ion-title>
         </ion-toolbar>
       </ion-header>
     
@@ -29,7 +29,7 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem,
 import { mapActions, mapGetters } from 'vuex';
 
 export default defineComponent({
-  name: 'Tab1',
+  name: 'List',
   components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonList, IonItem },
   computed: {
     ...mapGetters('collection', {

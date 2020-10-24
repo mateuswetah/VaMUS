@@ -6,7 +6,7 @@ import CollectionModel from './models';
 const state = {
     items: [],
     collections: Array<CollectionModel>(),
-    collection: null,
+    collection: CollectionModel,
     attachments: [],
     files: [],
     repositoryTotalCollections: '',

@@ -1,14 +1,14 @@
 <template>
   <ion-page>
-    <ion-header>
+    <ion-header :transluscent="true">
       <ion-toolbar>
-        <ion-title>Tab 2</ion-title>
+        <ion-title>VaMUS</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Tab 2</ion-title>
+          <ion-title size="large">Mapa</ion-title>
         </ion-toolbar>
       </ion-header>
       
@@ -24,7 +24,7 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue
 import * as L from 'leaflet';
 
 export default defineComponent({
-  name: 'Tab2',
+  name: 'Map',
   components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage },
   data(): {
     map: L.Map | undefined; 
@@ -33,14 +33,8 @@ export default defineComponent({
       map: undefined
     }
   },
-  mounted() {
-    this.initializeMap();
-  },
-  beforeDestroy() {
-    // this.map.remove();
-  },
   methods: {
-    initializeMap() {
+    ionViewDidEnter() {
       this.map = L.map('mapId').setView([-15.809365, -49.521065], 5);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -52,6 +46,10 @@ export default defineComponent({
         .addTo(this.map)
         .bindPopup('Algum museu')
         .openPopup();
+    },
+    ionViewWillLeave() {
+      if (this.map)
+        this.map.remove();
     }
   }
 });

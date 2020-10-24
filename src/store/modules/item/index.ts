@@ -1,17 +1,12 @@
 import * as actions from './actions';
 import * as getters from './getters';
 import * as mutations from './mutations';
+import ItemModel from './models';
 
 const state = {
-    item: [],
-    itemMetadata: [],
-    error: [],
-    itemTitle: '',
-    attachment: {},
-    attachments: [],
-    lastUpdated: '',
-    comment_status: '',
-    totalAttachments: 0
+    item: ItemModel,
+    items: [ ItemModel ],
+    collectionItems: [ ItemModel ]
 };
 
 export default {

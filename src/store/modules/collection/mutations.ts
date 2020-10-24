@@ -1,5 +1,3 @@
-import CollectionModel from './models';
-
-export const setCollections = (state: any, collections: CollectionModel) => {
+export const setCollections = (state: any, collections: [] ) => {
     state.collections = collections;
 }

@@ -1,7 +1,7 @@
 export default class CollectionModel {
-    name: string;
-  
-    constructor() {
-      this.name = '';
-    }
+  name: string;
+
+  constructor() {
+    this.name = '';
   }
+}

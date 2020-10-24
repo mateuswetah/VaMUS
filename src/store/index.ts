@@ -2,12 +2,12 @@ import { createStore } from 'vuex'
 
 import item from './modules/item';
 import collection from './modules/collection';
-import search from './modules/search';
+import institution from './modules/institution';
 
 export default createStore({
     modules: {
       item,
       collection,
-      search
+      institution
   }
 })
