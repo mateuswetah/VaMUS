@@ -34,8 +34,8 @@ import {
     IonList
 } from "@ionic/vue"
 import { mapActions, mapGetters } from "vuex"
-import ItemsList from '@/components/items-list.vue'
-import CollectionsList from '@/components/collections-list.vue'
+import ItemsList from '@/components/ItemsList.vue'
+import CollectionsList from '@/components/CollectionsList.vue'
 
 export default defineComponent({
     name: "List",

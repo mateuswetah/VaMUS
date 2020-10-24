@@ -3,7 +3,7 @@ import { stringify } from 'qs';
 
 export const fetchItems = ({ commit }: any, params: any) => {
     return new Promise((resolve, reject) => { 
-        let endpoint = '/items?fetch_only=thumbnail&';
+        let endpoint = '/items?fetch_only=thumbnail,title,description&';
 
         endpoint += stringify(params);
 
@@ -25,7 +25,7 @@ export const fetchItems = ({ commit }: any, params: any) => {
 
 export const fetchCollectionItems = ({ commit }: any, { collectionId, params }: {collectionId: string; params: any}) => {
     return new Promise((resolve, reject) => { 
-        let endpoint = '/collection/' + collectionId + '/items/?fetch_only=thumbnail&';
+        let endpoint = '/collection/' + collectionId + '/items/?fetch_only=thumbnail,title,description&';
         endpoint += stringify(params);
 
         tainacanApi.get(endpoint)

@@ -10,7 +10,7 @@
                     size="4"
                     v-for="(item, index) of items"
                     :key="index"
-                >
+                >   
                     <ion-img
                         v-if="
                             item.thumbnail &&

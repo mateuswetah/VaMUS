@@ -72,7 +72,7 @@ import {
     IonList,
     IonImg
 } from "@ionic/vue";
-import ItemsList from '@/components/items-list.vue'
+import ItemsList from '@/components/ItemsList.vue'
 
 export default defineComponent({
     name: 'CollectionPage',
