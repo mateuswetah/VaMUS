@@ -6,7 +6,8 @@ import ItemModel from './models';
 const state = {
     item: ItemModel,
     items: [ ItemModel ],
-    collectionItems: [ ItemModel ]
+    collectionItems: [ ItemModel ],
+    totalItems: Number
 };
 
 export default {

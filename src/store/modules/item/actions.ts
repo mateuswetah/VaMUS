@@ -10,12 +10,11 @@ export const fetchItems = ({ commit }: any, params: any) => {
         tainacanApi.get(endpoint)
             .then(res => {
                 const items = res.data.items;
+                const totalItems = res.headers['x-wp-total'];
                 commit('setItems', items);
+                commit('setTotalItems', totalItems);
 
-                resolve({
-                    items: items,
-                    total: res.headers['x-wp-total'] 
-                });
+                resolve({ items, totalItems });
             }) 
             .catch(error => {
                 console.log(error);

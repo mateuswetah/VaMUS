@@ -4,12 +4,9 @@ import * as mutations from './mutations';
 import CollectionModel from './models';
 
 const state = {
-    items: [],
     collections: Array<CollectionModel>(),
     collection: CollectionModel,
-    attachments: [],
-    files: [],
-    repositoryTotalCollections: '',
+    totalCollections: Number
 };
 
 export default {

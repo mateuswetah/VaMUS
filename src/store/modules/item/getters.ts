@@ -10,3 +10,6 @@ export const getCollectionItems =  (state: any) => {
     return state.collectionItems;
 };
 
+export const getTotalItems = (state: any) => {
+    return state.totalItems;
+};

@@ -7,12 +7,12 @@ export const fetchCollections = ({ commit }: any) => {
         tainacanApi.get(endpoint)
             .then(res => {
                 const collections = res.data;
-                commit('setCollections', collections);
+                const totalCollections = res.headers['x-wp-total'];
 
-                resolve({
-                    collections: collections,
-                    total: res.headers['x-wp-total'] 
-                });
+                commit('setCollections', collections);
+                commit('setTotalCollections', totalCollections);
+
+                resolve({ collections, totalCollections });
             }) 
             .catch(error => {
                 console.log(error);

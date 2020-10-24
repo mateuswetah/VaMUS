@@ -16,6 +16,7 @@
         <ion-item-group>
           <ion-item-divider>
             <ion-label>Itens</ion-label>
+            <ion-note slot="end">{{ totalItems }}</ion-note>
           </ion-item-divider>
           <ion-grid>
             <ion-row>
@@ -44,6 +45,7 @@
         <ion-item-group>
           <ion-item-divider>
             <ion-label>Coleções</ion-label>
+            <ion-note slot="end">{{ totalCollections }}</ion-note>
           </ion-item-divider>
           <ion-item 
               v-for="(collection, index) of collections"
@@ -101,10 +103,12 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('collection', {
-        collections: 'getCollections'
+        collections: 'getCollections',
+        totalCollections: 'getTotalCollections'
     }),
     ...mapGetters('item', {
-        items: 'getItems'
+        items: 'getItems',
+        totalItems: 'getTotalItems'
     })
   },
   mounted() {
