@@ -5,11 +5,11 @@
                 <ion-buttons slot="start">
                     <ion-back-button></ion-back-button>
                 </ion-buttons>
-                <span v-if="!isLoadingInstitution">
-                    imagem capa: {{institution["@files:header"]?.url}}
+                <span v-if="!isLoadingInstitute">
+                    imagem capa: {{institute["@files:header"]?.url}}
                 </span>
-                <ion-title v-if="!isLoadingInstitution">
-                    {{ institution.name ? institution.name : 'Instituição' }}
+                <ion-title v-if="!isLoadingInstitute">
+                    {{ institute.name ? institute.name : 'Instituição' }}
                 </ion-title>
                 <ion-skeleton-text v-else animated />
             </ion-toolbar>
@@ -20,7 +20,7 @@
                     <ion-buttons slot="start">
                         <ion-back-button></ion-back-button>
                     </ion-buttons>
-                    <ion-title v-if="!isLoadingInstitution" size="large">{{ 'Instituição' }}</ion-title>
+                    <ion-title v-if="!isLoadingInstitute" size="large">{{ 'Instituição' }}</ion-title>
                     <ion-skeleton-text v-else animated />
                 </ion-toolbar>
             </ion-header>
@@ -42,44 +42,44 @@
                 </ion-segment>
 
                 <div v-if="currentSegment === 'about'">
-                    <div v-if="!isLoadingInstitution">
+                    <div v-if="!isLoadingInstitute">
                         <p>
-                        {{institution.name}}
+                        {{institute.name}}
                         </p><p>
-                        {{institution.mus_cod}}
+                        {{institute.mus_cod}}
                         </p><p>
-                        {{institution.num_sniic}}
+                        {{institute.num_sniic}}
                         </p><p>
-                        {{institution.shortDescription}}
+                        {{institute.shortDescription}}
                         </p><p>
-                        {{institution.esfera}}
+                        {{institute.esfera}}
                         </p><p>
-                        {{institution.esfera_tipo}}
+                        {{institute.esfera_tipo}}
                         </p><p>
-                        {{institution.mus_instituicaoMantenedora}}
+                        {{institute.mus_instituicaoMantenedora}}
                         </p><p>
-                        {{institution.En_Nome_Logradouro}}
+                        {{institute.En_Nome_Logradouro}}
                         </p><p>
-                        {{institution.En_Bairro}}
+                        {{institute.En_Bairro}}
                         </p><p>
-                        {{institution.En_Municipio}}
+                        {{institute.En_Municipio}}
                         </p><p>
-                        {{institution.En_Estado}}
+                        {{institute.En_Estado}}
                         </p><p>
-                        {{institution.endereco}}
+                        {{institute.endereco}}
                         </p><p>
-                        {{institution.site}}
+                        {{institute.site}}
                         </p><p>
-                        {{institution.mus_tipo_tematica}}
+                        {{institute.mus_tipo_tematica}}
                         </p><p>
-                        {{institution.facebook}}
+                        {{institute.facebook}}
                         </p><p>
-                        {{institution.instagram}}
+                        {{institute.instagram}}
                          </p>
                     </div>
                 </div>
                 <div v-if="currentSegment === 'events'">
-                    <div v-if="!isLoadingEvents && institution.events">
+                    <div v-if="!isLoadingEvents && institute.events">
                         
                     </div>
                 </div>
@@ -112,7 +112,7 @@ import {
 } from "@ionic/vue";
 
 export default defineComponent({
-    name: 'InstitutionPage',
+    name: 'InstitutePage',
     components: {
         IonPage,
         IonHeader,
@@ -128,37 +128,37 @@ export default defineComponent({
     },
     data() {
         return {
-            isLoadingInstitution: false,
+            isLoadingInstitute: false,
             isLoadingEvents: false,
             isLoadingCollections: false,
-            institutionId: '',
+            instituteId: '',
             currentSegment: 'about'
         };
     },
     computed: {
-        ...mapGetters("institution", {
-            institution: "getInstitution",
+        ...mapGetters("institute", {
+            institute: "getInstitute",
         }),
     },
     mounted() {
-        this.institutionId = '' + this.$route.params.institutionId;
-        this.isLoadingInstitution = true;
-        this.fetchInstitutionAbout(this.institutionId)
-            .then(() => {this.isLoadingInstitution = false})
-            .catch(() => (this.isLoadingInstitution = false));
+        this.instituteId = '' + this.$route.params.instituteId;
+        this.isLoadingInstitute = true;
+        this.fetchInstituteAbout(this.instituteId)
+            .then(() => {this.isLoadingInstitute = false})
+            .catch(() => (this.isLoadingInstitute = false));
     },
     methods: {
-        ...mapActions("institution", ["fetchInstitutionAbout", "fetchInstitutionEvents"]),
+        ...mapActions("institute", ["fetchInstituteAbout", "fetchInstituteEvents"]),
         ...mapActions("collection", ["fetchInstituteCollections"]),
-        // ...mapActions("item", ["fetchInstitutionItems"]),
+        // ...mapActions("item", ["fetchInstituteItems"]),
         segmentChanged(ev: CustomEvent) {
             this.currentSegment = ev.detail.value;
             
-            if (this.currentSegment === 'events' && !this.institution.events) {
+            if (this.currentSegment === 'events' && !this.institute.events) {
                 
                 // Load events
                 this.isLoadingEvents = true;
-                this.fetchInstitutionEvents(this.institutionId)
+                this.fetchInstituteEvents(this.instituteId)
                     .then(() => (this.isLoadingEvents = false))
                     .catch(() => (this.isLoadingEvents = false));
             
@@ -166,7 +166,7 @@ export default defineComponent({
                 
                 // Load collections
                 this.isLoadingCollections = true;
-                this.fetchInstituteCollections({ instituteId: this.institutionId })
+                this.fetchInstituteCollections({ instituteId: this.instituteId })
                     .then(() => (this.isLoadingCollections = false))
                     .catch(() => (this.isLoadingCollections = false));
             }

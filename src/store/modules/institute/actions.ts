@@ -1,6 +1,6 @@
 import { tainacanApi, mapasApi } from '../../axios'
 
-export const fetchInstitutionAbout = ({ commit }: any, institutionId: string) => new Promise((resolve, reject) => {
+export const fetchInstituteAbout = ({ commit }: any, instituteId: string) => new Promise((resolve, reject) => {
     const fields = [
         'id',
         'name',
@@ -23,13 +23,13 @@ export const fetchInstitutionAbout = ({ commit }: any, institutionId: string) =>
         'facebook',
         'instagram'
     ];
-    const endpoint = `/space/find?id=eq(${institutionId})&@select=${fields.join(',')}&@files=(avatar,header):name,url`;
+    const endpoint = `/space/find?id=eq(${instituteId})&@select=${fields.join(',')}&@files=(avatar,header):name,url`;
     mapasApi.get(endpoint).then(res => {
-        const institution = (Array.isArray(res.data) ? res.data[0] : res.data);
-        Object.keys(institution).forEach(e => { if( !['@files:avatar', '@files:header'].includes(e) && !fields.includes(e)) delete institution[e]} )
-        console.log(institution);
-        commit('setInstitution', institution);
-        resolve({institution});
+        const institute = (Array.isArray(res.data) ? res.data[0] : res.data);
+        Object.keys(institute).forEach(e => { if( !['@files:avatar', '@files:header'].includes(e) && !fields.includes(e)) delete institute[e]} )
+        console.log(institute);
+        commit('setInstitute', institute);
+        resolve({institute});
     }).catch(error => {
         console.error(error);
         reject(error);
@@ -37,12 +37,12 @@ export const fetchInstitutionAbout = ({ commit }: any, institutionId: string) =>
 });
 
 
-export const fetchInstitutionEvents = ({ commit }: any, institutionId: string) => new Promise((resolve, reject) => {
+export const fetchInstituteEvents = ({ commit }: any, instituteId: string) => new Promise((resolve, reject) => {
     const fields = ['id','name','readableOccurrences'];
-    const endpoint = `/event/findBySpace?spaceId=${institutionId}&@select=${fields.join(',')}`;
+    const endpoint = `/event/findBySpace?spaceId=${instituteId}&@select=${fields.join(',')}`;
     mapasApi.get(endpoint).then(res => {
         const events = res.data;
-        commit('setInstitutionEvent', events);
+        commit('setInstituteEvent', events);
         resolve({events});
     }).catch(error => {
         console.error(error);
@@ -50,7 +50,7 @@ export const fetchInstitutionEvents = ({ commit }: any, institutionId: string) =
     });
 });
 
-export const fetchInstitution = ({ commit }: any) => {
+export const fetchInstitute = ({ commit }: any) => {
     return new Promise((resolve, reject) => { 
         const endpoint = '/collections';
 

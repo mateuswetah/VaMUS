@@ -4,7 +4,7 @@ export interface EventModel {
     readableOccurrences: any[];
 }
 
-export default class InstitutionModel {
+export default class InstituteModel {
     name: string;
     events: EventModel[];
     constructor() {

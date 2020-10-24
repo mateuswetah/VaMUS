@@ -47,7 +47,7 @@ export const fetchInstituteCollections = ({ commit }: any, {instituteId, params}
         const queryParams = {
             ...params,  
             metaquery: [{
-                key: 'vamus_institution_collection',
+                key: 'vamus_institute_collection',
                 value: instituteId,
                 compare: 'IN'
             }]
