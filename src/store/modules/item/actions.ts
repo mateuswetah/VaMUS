@@ -1,12 +1,15 @@
 import { tainacanApi } from '../../axios'
+import { stringify } from 'qs';
 
-export const fetchItems = ({ commit }: any) => {
+export const fetchItems = ({ commit }: any, params: any) => {
     return new Promise((resolve, reject) => { 
-        const endpoint = '/items';
+        let endpoint = '/items?fetch_only=thumbnail&';
+
+        endpoint += stringify(params);
 
         tainacanApi.get(endpoint)
             .then(res => {
-                const items = res.data;
+                const items = res.data.items;
                 commit('setItems', items);
 
                 resolve({
@@ -23,11 +26,11 @@ export const fetchItems = ({ commit }: any) => {
 
 export const fetchCollectionItems = ({ commit }: any, { collectionId }: {collectionId: string}) => {
     return new Promise((resolve, reject) => { 
-        const endpoint = '/items/' + collectionId;
+        const endpoint = '/items/' + collectionId + '?fetch_only=thumbnail';
 
         tainacanApi.get(endpoint)
             .then(res => {
-                const collectionItems = res.data;
+                const collectionItems = res.data.items;
                 commit('setCollectionItems', collectionItems);
 
                 resolve({
