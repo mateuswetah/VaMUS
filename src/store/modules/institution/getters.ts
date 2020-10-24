@@ -1,1 +1,3 @@
-export const getPostqueryAttribute = () => { };
+export const getInstitution = (state: any) => {
+    return state.institution;
+}
