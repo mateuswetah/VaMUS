@@ -30,14 +30,14 @@
                     <ion-segment-button value="about">
                         <ion-label>Sobre</ion-label>
                     </ion-segment-button>
-                    <ion-segment-button value="events">
-                        <ion-label>Eventos</ion-label>
-                    </ion-segment-button>
                     <ion-segment-button value="collections">
                         <ion-label>Coleções</ion-label>
                     </ion-segment-button>
                     <ion-segment-button value="items">
                         <ion-label>Itens</ion-label>
+                    </ion-segment-button>
+                    <ion-segment-button value="events">
+                        <ion-label>Eventos</ion-label>
                     </ion-segment-button>
                 </ion-segment>
 
@@ -84,7 +84,7 @@
                     </div>
                 </div>
                 <div v-if="currentSegment === 'collections'">
-                    collections
+                    <collections-list is-institute-collections-list :is-loading-collections="isLoadingCollections" />
                 </div>
                 <div v-if="currentSegment === 'items'">
                     items
@@ -130,6 +130,7 @@ export default defineComponent({
         return {
             isLoadingInstitution: false,
             isLoadingEvents: false,
+            isLoadingCollections: false,
             institutionId: '',
             currentSegment: 'about'
         };
@@ -147,17 +148,27 @@ export default defineComponent({
             .catch(() => (this.isLoadingInstitution = false));
     },
     methods: {
-        ...mapActions("institution", ["fetchInstitutionAbout"]),
-        ...mapActions("institution", ["fetchInstitutionEvents"]),
+        ...mapActions("institution", ["fetchInstitutionAbout", "fetchInstitutionEvents"]),
+        ...mapActions("collection", ["fetchInstituteCollections"]),
         // ...mapActions("item", ["fetchInstitutionItems"]),
         segmentChanged(ev: CustomEvent) {
             this.currentSegment = ev.detail.value;
+            
             if (this.currentSegment === 'events' && !this.institution.events) {
+                
                 // Load events
                 this.isLoadingEvents = true;
                 this.fetchInstitutionEvents(this.institutionId)
                     .then(() => (this.isLoadingEvents = false))
                     .catch(() => (this.isLoadingEvents = false));
+            
+            } else if (this.currentSegment === 'collections') {
+                
+                // Load collections
+                this.isLoadingCollections = true;
+                this.fetchInstituteCollections({ instituteId: this.institutionId })
+                    .then(() => (this.isLoadingCollections = false))
+                    .catch(() => (this.isLoadingCollections = false));
             }
         }
     },

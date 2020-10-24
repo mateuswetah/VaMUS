@@ -41,14 +41,14 @@ export const fetchCollections = ({ commit }: any, params: any) => {
     });
 };
 
-export const fetchInstituteCollections = ({ commit }: any, {vamusInstituteIdentifier, params}: {vamusInstituteIdentifier: string; params: any}) => {
+export const fetchInstituteCollections = ({ commit }: any, {instituteId, params}: {instituteId: string; params: any}) => {
     return new Promise((resolve, reject) => { 
         const endpoint = '/collections?'
         const queryParams = {
             ...params,  
             metaquery: [{
                 key: 'vamus_institution_collection',
-                value: vamusInstituteIdentifier,
+                value: instituteId,
                 compare: 'IN'
             }]
         }
