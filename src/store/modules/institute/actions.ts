@@ -1,4 +1,4 @@
-import { tainacanApi, mapasApi } from '../../axios'
+import { mapasApi } from '../../axios'
 
 export const fetchInstituteAbout = ({ commit }: any, instituteId: string) => new Promise((resolve, reject) => {
     const fields = [
@@ -50,19 +50,30 @@ export const fetchInstituteEvents = ({ commit }: any, instituteId: string) => ne
     });
 });
 
-export const fetchInstitute = ({ commit }: any) => {
+export const fetchInstitutes = ({ commit, rootGetters }: any) => {
     return new Promise((resolve, reject) => { 
-        const endpoint = '/collections';
-
-        tainacanApi.get(endpoint)
+        const endpoint = '/space/find?';
+        const fields = [
+            'id',
+            'name',
+            'shortDescription',
+            'location',
+            'mus_cod',
+            'location.*',
+            'num_sniic',
+        ];
+        const ids = new Set(rootGetters['collection/getInstitutesIds'].filter((id: string) => id != ''));
+        const idsLimit = ids.size ? (ids.size > 1 ? `&id=in(${ [...ids].join(',') })` : `&id=eq(${ [...ids].join(',') })`) : ''
+        
+        mapasApi.get(endpoint + `@limit=12&@select=${fields.join(',')}&@files=(avatar,header):name,url)${idsLimit}`)
             .then(res => {
-                const collections = res.data;
-                const totalCollections = res.headers['x-wp-total'];
+                const institutes = res.data;
+                const totalInstitutes = ids.size;
 
-                commit('setCollections', collections);
-                commit('setTotalCollections', totalCollections);
+                commit('setInstitutes', institutes);
+                commit('setTotalInstitutes', totalInstitutes);
 
-                resolve({ collections, totalCollections });
+                resolve({ institutes, totalInstitutes });
             }) 
             .catch(error => {
                 console.log(error);
@@ -70,5 +81,3 @@ export const fetchInstitute = ({ commit }: any) => {
             });
     });
 };
-
-export const setPostqueryAttribute = () => { };

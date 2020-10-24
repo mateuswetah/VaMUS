@@ -1,36 +1,32 @@
 <template>
     <ion-item-group>
         <ion-item-divider>
-            <ion-label>Coleções</ion-label>
-            <ion-note slot="end">{{ totalCollections }}</ion-note>
+            <ion-label>Museus</ion-label>
+            <ion-note slot="end">{{ totalInstitutes}}</ion-note>
         </ion-item-divider>
         <ion-item
             button
-            :router-link="'/collection/' + collection.id"
-            v-for="(collection, index) of collections"
+            :router-link="'/institute/' + institute.id"
+            v-for="(institute, index) of institutes"
             :key="index"
         >
             <ion-thumbnail slot="start">
                 <ion-img
-                    v-if="
-                        collection.thumbnail &&
-                        collection.thumbnail.thumbnail &&
-                        collection.thumbnail.thumbnail[0]
-                    "
-                    :src="collection.thumbnail.thumbnail[0]"
+                    v-if="institute['@files:avatar']?.url"
+                    :src="institute['@files:avatar']?.url"
                 />
                 <ion-skeleton-text v-else />
             </ion-thumbnail>
             <ion-label>
                 <h3>
-                    {{ collection.name }}
+                    {{ institute.name }}
                 </h3>
                 <p>
-                    {{ collection.description }}
+                    {{ institute.description }}
                 </p>
             </ion-label>
         </ion-item>
-        <ion-item v-if="isLoadingCollections">
+        <ion-item v-if="isLoadingInstitutes">
             <ion-thumbnail slot="start">
                 <ion-skeleton-text></ion-skeleton-text>
             </ion-thumbnail>
@@ -72,10 +68,9 @@ import {
     IonItem,
     IonImg
 } from "@ionic/vue";
-import CollectionModel from '@/store/modules/collection/models';
 
 export default defineComponent({
-    name: 'CollectionsList',
+    name: 'InstitutesList',
     components: {
         IonSkeletonText,
         IonLabel,
@@ -87,34 +82,17 @@ export default defineComponent({
         IonImg
     },
     props: {
-        isInstituteCollectionsList: Boolean,
-        isLoadingCollections: Boolean
+        isLoadingInstitutes: Boolean
     },
     computed: {
-        collections(): Array<CollectionModel> {
-            if (this.isInstituteCollectionsList)
-                return this.getInstituteCollections();
-            else
-                return this.getCollections();
-        },
-        totalCollections(): number {
-            if (this.isInstituteCollectionsList)
-                return this.getInstituteTotalCollections();
-            else
-                return this.getTotalCollections();
-        }
+        ...mapGetters("institute", {
+            institutes: "getInstitutes",
+            totalInstitutes: "getTotalInstitutes",
+        })
     },
     setup() {
       const router = useRouter();
       return { router };
-    },
-    methods: {
-        ...mapGetters("collection", [
-            "getCollections",
-            "getTotalCollections",
-            "getInstituteCollections",
-            "getInstituteTotalCollections",
-        ])
     }
 })
 </script>

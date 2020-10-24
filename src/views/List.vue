@@ -17,6 +17,8 @@
                 <items-list :is-loading-items="isLoadingItems" />
 
                 <collections-list :is-loading-collections="isLoadingCollections" />
+
+                <institutes-list :is-loading-institutes="isLoadingInstitutes" />
             
             </ion-list>
         </ion-content>
@@ -33,9 +35,10 @@ import {
     IonContent,
     IonList
 } from "@ionic/vue"
-import { mapActions, mapGetters } from "vuex"
+import { mapActions } from "vuex"
 import ItemsList from '@/components/ItemsList.vue'
 import CollectionsList from '@/components/CollectionsList.vue'
+import InstitutesList from '@/components/InstitutesList.vue'
 
 export default defineComponent({
     name: "List",
@@ -47,19 +50,15 @@ export default defineComponent({
         IonPage,
         IonList,
         ItemsList,
-        CollectionsList
+        CollectionsList,
+        InstitutesList
     },
     data() {
         return {
             isLoadingCollections: false,
             isLoadingItems: false,
+            isLoadingInstitutes: false
         };
-    },
-    computed: {
-        ...mapGetters("collection", {
-            collections: "getCollections",
-            totalCollections: "getTotalCollections",
-        }),
     },
     mounted() {
         // Load items
@@ -73,10 +72,17 @@ export default defineComponent({
         this.fetchCollections()
             .then(() => (this.isLoadingCollections = false))
             .catch(() => (this.isLoadingCollections = false));
+
+        // Load institutes
+        this.isLoadingInstitutes = true;
+        this.fetchInstitutes()
+            .then(() => (this.isLoadingInstitutes = false))
+            .catch(() => (this.isLoadingInstitutes = false));
     },
     methods: {
-        ...mapActions("collection", ["fetchCollections"]),
         ...mapActions("item", ["fetchItems"]),
+        ...mapActions("collection", ["fetchCollections"]),
+        ...mapActions("institute", ["fetchInstitutes"]),
     },
 });
 </script>

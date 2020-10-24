@@ -1,5 +1,6 @@
 import { tainacanApi } from '../../axios'
 import qs from 'qs'
+import CollectionModel from './models';
 
 export const fetchCollection = ({ commit }: any, collectionId: string) => {
     return new Promise((resolve, reject) => { 
@@ -47,7 +48,7 @@ export const fetchInstituteCollections = ({ commit }: any, {instituteId, params}
         const queryParams = {
             ...params,  
             metaquery: [{
-                key: 'vamus_institute_collection',
+                key: 'vamus_institute_identifier_collection',
                 value: instituteId,
                 compare: 'IN'
             }]
@@ -62,6 +63,31 @@ export const fetchInstituteCollections = ({ commit }: any, {instituteId, params}
                 commit('setTotalInstituteCollections', totalInstituteCollections);
 
                 resolve({ instituteCollections, totalInstituteCollections });
+            }) 
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
+    });
+};
+
+// Obtain Institutes IDs from collections
+export const fetchInstitutesFromCollections = ({ commit }: any) => {
+    return new Promise((resolve, reject) => { 
+        const endpoint = '/collections?'
+
+        tainacanApi.get(endpoint)
+            .then(res => {
+                const collections = res.data;
+                const totalCollections = res.headers['x-wp-total'];
+
+                commit('setCollections', collections);
+                commit('setTotalCollections', totalCollections);
+
+                const institutesIds = collections.map((aCollection: CollectionModel) => aCollection.vamus_institute_identifier_collection );
+                commit('setInstitutesIds', institutesIds);
+
+                resolve({ collections, totalCollections });
             }) 
             .catch(error => {
                 console.log(error);
