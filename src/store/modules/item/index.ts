@@ -7,7 +7,8 @@ const state = {
     item: ItemModel,
     items: [ ItemModel ],
     collectionItems: [ ItemModel ],
-    totalItems: Number
+    totalItems: 0,
+    totalCollectionItems: 0
 };
 
 export default {

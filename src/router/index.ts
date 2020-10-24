@@ -24,6 +24,10 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/Map.vue')
       }
     ]
+  },
+  {
+    path: '/collection/:collectionId',
+    component: () => import('@/views/Collection.vue')
   }
 ]
 

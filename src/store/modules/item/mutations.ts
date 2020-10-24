@@ -15,3 +15,7 @@ export const setCollectionItems = (state: any, collectionItems: []) => {
 export const setTotalItems = (state: any, totalItems: number) => {
     state.totalItems = totalItems;
 }
+
+export const setTotalCollectionItems = (state: any, totalCollectionItems: number) => {
+    state.totalCollectionItems = totalCollectionItems;
+}

@@ -13,3 +13,7 @@ export const getCollectionItems =  (state: any) => {
 export const getTotalItems = (state: any) => {
     return state.totalItems;
 };
+
+export const getCollectionTotalItems = (state: any) => {
+    return state.totalCollectionItems;
+};

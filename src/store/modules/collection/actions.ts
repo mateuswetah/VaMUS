@@ -20,3 +20,23 @@ export const fetchCollections = ({ commit }: any) => {
             });
     });
 };
+
+
+export const fetchCollection = ({ commit }: any, collectionId: string) => {
+    return new Promise((resolve, reject) => { 
+        const endpoint = '/collections/' + collectionId;
+
+        tainacanApi.get(endpoint)
+            .then(res => {
+                const collection = res.data;
+
+                commit('setCollection', collection);
+
+                resolve({ collection });
+            }) 
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
+    });
+};

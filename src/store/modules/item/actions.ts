@@ -23,19 +23,19 @@ export const fetchItems = ({ commit }: any, params: any) => {
     });
 };
 
-export const fetchCollectionItems = ({ commit }: any, { collectionId }: {collectionId: string}) => {
+export const fetchCollectionItems = ({ commit }: any, { collectionId, params }: {collectionId: string; params: any}) => {
     return new Promise((resolve, reject) => { 
-        const endpoint = '/items/' + collectionId + '?fetch_only=thumbnail';
+        let endpoint = '/collection/' + collectionId + '/items/?fetch_only=thumbnail&';
+        endpoint += stringify(params);
 
         tainacanApi.get(endpoint)
             .then(res => {
                 const collectionItems = res.data.items;
+                const totalCollectionItems = res.headers['x-wp-total'];
                 commit('setCollectionItems', collectionItems);
+                commit('setTotalCollectionItems', totalCollectionItems);
 
-                resolve({
-                    collectionItems: collectionItems,
-                    total: res.headers['x-wp-total'] 
-                });
+                resolve({ collectionItems, totalCollectionItems });
             }) 
             .catch(error => {
                 console.log(error);

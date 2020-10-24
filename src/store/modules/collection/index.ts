@@ -5,8 +5,8 @@ import CollectionModel from './models';
 
 const state = {
     collections: Array<CollectionModel>(),
-    collection: CollectionModel,
-    totalCollections: Number
+    collection: new CollectionModel(),
+    totalCollections: 0
 };
 
 export default {
