@@ -111,14 +111,17 @@ export default defineComponent({
         this.isLoadingItemMetadata = true;
         this.isLoadingItemAttachments = true;
         this.fetchItem(this.itemId)
-            .then(() => (this.isLoadingItem = false))
+            .then(() => {
+                this.isLoadingItem = false;
+                this.addItemAttachments(this.itemId)
+                    .then(() => (this.isLoadingItemAttachments = false))
+                    .catch(() => (this.isLoadingItemAttachments = false));
+                })
             .catch(() => (this.isLoadingItem = false));
         this.fetchItemMetadata(this.itemId)
             .then(() => (this.isLoadingItemMetadata = false))
             .catch(() => (this.isLoadingItemMetadata = false));
-        this.addItemAttachments(this.itemId)
-            .then(() => (this.isLoadingItemAttachments = false))
-            .catch(() => (this.isLoadingItemAttachments = false));
+        
     },
     methods: {
         ...mapActions("item", ["fetchItem"]),
