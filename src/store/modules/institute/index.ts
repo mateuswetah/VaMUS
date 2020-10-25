@@ -4,7 +4,7 @@ import * as mutations from './mutations';
 import InstituteModel from './models';
 
 const state = {
-    institute: InstituteModel,
+    institute: new InstituteModel(),
     institutes: Array<InstituteModel>(),
     totalInstitutes: 0
 };

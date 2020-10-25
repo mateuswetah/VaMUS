@@ -4,12 +4,13 @@ import * as mutations from './mutations';
 import ItemModel from './models';
 
 const state = {
-    item: ItemModel,
-    items: [ ItemModel ],
-    collectionItems: [ ItemModel ],
-    instituteItems: [ ItemModel ],
+    item: new ItemModel(),
+    items: Array<ItemModel>(),
+    collectionItems: Array<ItemModel>(),
+    itemsByLocation: Array<ItemModel>(),
     totalItems: 0,
     totalCollectionItems: 0,
+    totalItensByLocation: 0,
     totalInstituteItems: 0
 };
 

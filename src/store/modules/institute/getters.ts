@@ -9,3 +9,11 @@ export const getInstitutes = (state: any) => {
 export const getTotalInstitutes = (state: any) => {
     return state.totalInstitutes;
 }
+
+export const getInstitutesByLocation = (state: any) => {
+    return state.institutesByLocation;
+};
+
+export const getTotalInstitutesByLocation = (state: any) => {
+    return state.totalInstitutesByLocation;
+};

@@ -25,3 +25,11 @@ export const getCollectionTotalItems = (state: any) => {
 export const getInstituteTotalItems = (state: any) => {
     return state.totalInstituteItems;
 };
+
+export const getItemsByLocation = (state: any) => {
+    return state.itemsByLocation;
+};
+
+export const getTotalItemsByLocation = (state: any) => {
+    return state.totalItemsByLocation;
+};

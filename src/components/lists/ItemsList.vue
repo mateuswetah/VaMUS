@@ -1,5 +1,5 @@
 <template>
-    <ion-item-group>
+    <ion-item-group v-if="totalItems">
         <ion-item-divider>
             <ion-label>Itens</ion-label>
             <ion-note slot="end">{{ totalItems }}</ion-note>
@@ -14,19 +14,7 @@
                     v-for="(item, index) of items"
                     :key="index"
                 >
-                    <ion-card :router-link="'/item/' + item.id">
-                        <ion-img
-                            v-if="
-                                item.thumbnail &&
-                                item.thumbnail.thumbnail &&
-                                item.thumbnail.thumbnail[0]
-                            "
-                            :src="item.thumbnail.thumbnail[0]"
-                        />
-                        <ion-card-header>
-                            <ion-card-title>{{ item.title }}</ion-card-title>
-                        </ion-card-header>
-                    </ion-card>
+                    <item-list-item :item="item" />
                 </ion-col>
             </ion-row>
             <ion-row v-else>
@@ -46,17 +34,14 @@ import { mapGetters } from "vuex";
 import {
     IonSkeletonText,
     IonLabel,
-    IonImg,
     IonItemGroup,
     IonItemDivider,
     IonGrid,
     IonCol,
     IonRow,
-    IonNote,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle
+    IonNote
 } from "@ionic/vue";
+import ItemListItem from '@/components/list-items/ItemListItem.vue';
 import ItemModel from '@/store/modules/item/models';
 
 export default defineComponent({
@@ -64,31 +49,33 @@ export default defineComponent({
     components: {
         IonSkeletonText,
         IonLabel,
-        IonImg,
         IonItemGroup,
         IonItemDivider,
         IonGrid,
         IonCol,
         IonRow,
         IonNote,
-        IonCard,
-        IonCardHeader,
-        IonCardTitle
+        ItemListItem
     },
     props: {
         isCollectionItemsList: Boolean,
+        isItemsByLocationList: Boolean,
         isLoadingItems: Boolean
     },
     computed: {
         items(): Array<ItemModel> {
             if (this.isCollectionItemsList)
                 return this.getCollectionItems();
+            else if (this.isItemsByLocationList)
+                return this.getItemsByLocation();
             else
                 return this.getItems();
         },
         totalItems(): number {
             if (this.isCollectionItemsList)
                 return this.getCollectionTotalItems();
+            else if (this.isItemsByLocationList)
+                return this.getTotalItemsByLocation();
             else
                 return this.getTotalItems();
         }
@@ -99,6 +86,8 @@ export default defineComponent({
             "getTotalItems",
             "getCollectionItems",
             "getCollectionTotalItems",
+            "getItemsByLocation",
+            "getTotalItemsByLocation"
         ])
     }
 });

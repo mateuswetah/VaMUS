@@ -1,20 +1,7 @@
 <template>
     <ion-page>
         <ion-content :fullscreen="true">
-            <ion-header translucent>
-                <ion-toolbar>
-                    <ion-searchbar
-                            :value="searchValue"
-                            @ionChange="onSearch"
-                            debounce="500" 
-                            animated 
-                            show-cancel-button="focus"
-                            placeholder="Procure por Museus, Coleções ou Itens..."></ion-searchbar>
-                    <ion-progress-bar 
-                            v-if="isLoadingSomeEntity"
-                            type="indeterminate" />
-                </ion-toolbar>
-            </ion-header>
+            <SearchBar />
             <div id="mapId" style="width: 100%; height: 100%" />
         </ion-content>
     </ion-page>
@@ -22,27 +9,25 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 import {
     IonPage,
-    IonHeader,
-    IonToolbar,
-    IonSearchbar,
     IonContent,
-    IonProgressBar
+    popoverController
 } from "@ionic/vue";
+import SearchBar from '@/components/others/SearchBar.vue';
+import MapMarkerPopover from '@/components/others/MapMarkerPopover.vue';
 import * as L from "leaflet";
 
 export default defineComponent({
     name: "Map",
-    components: { IonHeader, IonToolbar, IonSearchbar, IonContent, IonPage, IonProgressBar },
+    components: { IonContent, IonPage, SearchBar },
     data(): {
         map: L.Map | undefined;
-        searchValue: string;
+        markersLayer: L.FeatureGroup | undefined;
         isLoadingCollections: boolean;
         isLoadingItems: boolean;
         isLoadingInstitutes: boolean;
-        isLoadingSomeEntity: boolean;
         points: {
             id: number;
             lat: number;
@@ -57,13 +42,18 @@ export default defineComponent({
     } {
         return {
             map: undefined,
+            markersLayer: undefined,
             isLoadingCollections: false,
             isLoadingItems: false,
             isLoadingInstitutes: false,
-            isLoadingSomeEntity: false,
-            searchValue: '',
             points: [ ],
         };
+    },
+    watch: {
+        searchValue() {
+            console.log(this.searchValue)
+            this.fetchContent();
+        }
     },
     computed: {
         ...mapGetters("institute", {
@@ -75,11 +65,18 @@ export default defineComponent({
         ...mapGetters("item", {
             items: "getItems",
         }),
+        ...mapGetters("search", {
+            searchValue: "getSearchValue",
+        })
     },
     methods: {
         ...mapActions("item", ["fetchItems"]),
         ...mapActions("collection", ["fetchCollections"]),
         ...mapActions("institute", ["fetchInstitutes"]),
+        ...mapMutations("item", ["setItemsByLocation", "setTotalItemsByLocation"]),
+        ...mapMutations("collection", ["setCollectionsByLocation", "setTotalCollectionsByLocation"]),
+        ...mapMutations("institute", ["setInstitutesByLocation", "setTotalInstitutesByLocation"]),
+        ...mapMutations("search", ["setIsLoadingSomeEntity"]),
         getIconUrlMarker(type: string) {
             switch (type) {
                 case '001': return 'assets/icon/marker-icon-1.png';
@@ -132,11 +129,11 @@ export default defineComponent({
             if (this.map != undefined) {
 
                 // First we clear all markers
-                this.map.eachLayer((layer) => {
-                    layer.remove();
-                })
-
+                if (this.markersLayer != undefined)
+                    this.markersLayer.clearLayers();
+            
                 // Then insert markers based on the points array
+                const newMarkers = [];
                 for (let i = 0; i < this.points.length; i++) {
                     const defaultIcon = L.icon({
                         iconUrl: this.getIconUrlMarker(this.points[i].markerType),
@@ -148,37 +145,36 @@ export default defineComponent({
                         shadowAnchor: [4, 26]
                     });
 
-                    const objects = this.points[i].objects;
-                    
-                    L.marker([this.points[i].lat, this.points[i].long], {icon:defaultIcon})
-                        .addTo(this.map)
-                        .bindPopup(`
-                            instituição: ${(objects.institutes[0]).name} <br >
-                            Total coleções: ${(objects.collections||[]).length} <br >
-                            Total itens: ${(objects.items||[]).length}
-                        `)
+                    newMarkers.push(L.marker([this.points[i].lat, this.points[i].long], { icon:defaultIcon })
+                        .on('click', (event) => this.openPopover(event, this.points[i].objects))
+                    );
                 }
+                
+                // Adds them to feature group layer so we can zoom and clear them easily
+                this.markersLayer = L.featureGroup(newMarkers)
+                    .addTo(this.map);
+
+                this.map.flyToBounds(this.markersLayer.getBounds());
             }
         },
         ionViewDidEnter() {
-            this.map = L.map("mapId").setView([-15.809365, -49.521065], 5);
+            if (this.map == undefined || !this.map.getContainer()) {
+                this.map = L.map("mapId").setView([-15.809365, -49.521065], 5);
 
-            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                attribution: "Instituições culturais",
-            }).addTo(this.map);
+                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    attribution: "Instituições culturais",
+                }).addTo(this.map);
+            }
 
             this.fetchContent();
         },
         ionViewWillLeave() {
             if (this.map) this.map.remove();
-        },
-        onSearch(ev: CustomEvent) {
-            this.searchValue = ev.detail.value;
-            this.fetchContent();
+            this.map = undefined;
         },
         fetchContent() {
             // Start loading everbody
-            this.isLoadingSomeEntity = true;
+            this.setIsLoadingSomeEntity(true);
             
             // Load items
             this.isLoadingItems = true;
@@ -200,10 +196,33 @@ export default defineComponent({
 
             Promise.all([ itemsRequest, collectionsRequest, institutesRequest])
                 .then(() => {
-                    this.isLoadingSomeEntity = false;
+                    this.setIsLoadingSomeEntity(false);
                     this.populatePoints();
                     this.addMakers();
                 });
+        },
+        async openPopover(ev: any, entities: { items: any[]; collections: any[]; institutes: any[] }) {
+            this.setItemsByLocation(entities.items);
+            this.setCollectionsByLocation(entities.collections);
+            this.setInstitutesByLocation(entities.institutes);
+            this.setTotalItemsByLocation(entities.items.length);
+            this.setTotalCollectionsByLocation(entities.collections.length);
+            this.setTotalInstitutesByLocation(entities.institutes.length);
+
+            const popover = await popoverController
+                .create({
+                    component: MapMarkerPopover,
+                    componentProps:{
+                        onDismissPopover: () => {
+                            popover.dismiss();
+                        }
+                    },
+                    cssClass: 'map-marker-popover',
+                    event: ev.originalEvent,
+                    translucent: true,
+                    showBackdrop: false
+                })
+            return popover.present();
         }
     },
 }); 

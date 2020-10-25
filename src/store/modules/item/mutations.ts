@@ -37,3 +37,11 @@ export const setTotalCollectionItems = (state: any, totalCollectionItems: number
 export const setInstituteTotalItems = (state: any, totalInstituteItems: number) => {
     state.totalInstituteItems = totalInstituteItems;
 };
+
+export const setItemsByLocation = (state: any, itemsByLocation: []) => {
+    state.itemsByLocation = itemsByLocation;
+}
+
+export const setTotalItemsByLocation = (state: any, totalItemsByLocation: number) => {
+    state.totalItemsByLocation = totalItemsByLocation;
+}

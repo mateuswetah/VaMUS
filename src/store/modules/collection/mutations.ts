@@ -23,3 +23,11 @@ export const setTotalInstituteCollections = (state: any, totalInstituteCollectio
 export const setInstitutesIds = (state: any, institutesIds: [ number ] ) => {
     state.institutesIds = institutesIds;
 }
+
+export const setCollectionsByLocation = (state: any, collectionsByLocation: []) => {
+    state.collectionsByLocation = collectionsByLocation;
+}
+
+export const setTotalCollectionsByLocation = (state: any, totalCollectionsByLocation: number) => {
+    state.totalCollectionsByLocation = totalCollectionsByLocation;
+}

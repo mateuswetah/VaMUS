@@ -1,35 +1,15 @@
 <template>
-    <ion-item-group>
+    <ion-item-group v-if="totalCollections">
         <ion-item-divider>
             <ion-label>Coleções</ion-label>
             <ion-note slot="end">{{ totalCollections }}</ion-note>
         </ion-item-divider>
-        <ion-item
-            button
-            :router-link="'/collection/' + collection.id"
-            v-for="(collection, index) of collections"
-            :key="index"
-        >
-            <ion-thumbnail slot="start">
-                <ion-img
-                    v-if="
-                        collection.thumbnail &&
-                        collection.thumbnail.thumbnail &&
-                        collection.thumbnail.thumbnail[0]
-                    "
-                    :src="collection.thumbnail.thumbnail[0]"
-                />
-                <ion-skeleton-text v-else />
-            </ion-thumbnail>
-            <ion-label>
-                <h3>
-                    {{ collection.name }}
-                </h3>
-                <p>
-                    {{ collection.description }}
-                </p>
-            </ion-label>
-        </ion-item>
+
+        <collection-list-item
+                v-for="(collection, index) of collections"
+                :key="index"
+                :collection="collection" />
+
         <ion-item v-if="isLoadingCollections">
             <ion-thumbnail slot="start">
                 <ion-skeleton-text></ion-skeleton-text>
@@ -60,7 +40,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useRouter } from 'vue-router';
 import { mapGetters } from "vuex";
 import {
     IonSkeletonText,
@@ -69,9 +48,9 @@ import {
     IonItemDivider,
     IonNote,
     IonThumbnail,
-    IonItem,
-    IonImg
+    IonItem
 } from "@ionic/vue";
+import CollectionListItem from '@/components/list-items/CollectionListItem.vue'
 import CollectionModel from '@/store/modules/collection/models';
 
 export default defineComponent({
@@ -84,29 +63,30 @@ export default defineComponent({
         IonNote,
         IonThumbnail,
         IonItem,
-        IonImg
+        CollectionListItem
     },
     props: {
         isInstituteCollectionsList: Boolean,
+        isCollectionsByLocationList: Boolean,
         isLoadingCollections: Boolean
     },
     computed: {
         collections(): Array<CollectionModel> {
             if (this.isInstituteCollectionsList)
                 return this.getInstituteCollections();
+            else if (this.isCollectionsByLocationList)
+                return this.getCollectionsByLocation()
             else
                 return this.getCollections();
         },
         totalCollections(): number {
             if (this.isInstituteCollectionsList)
                 return this.getInstituteTotalCollections();
+            else if (this.isCollectionsByLocationList)
+                return this.getTotalCollectionsByLocation();
             else
                 return this.getTotalCollections();
         }
-    },
-    setup() {
-      const router = useRouter();
-      return { router };
     },
     methods: {
         ...mapGetters("collection", [
@@ -114,6 +94,8 @@ export default defineComponent({
             "getTotalCollections",
             "getInstituteCollections",
             "getInstituteTotalCollections",
+            "getCollectionsByLocation",
+            "getTotalCollectionsByLocation"
         ])
     }
 })
