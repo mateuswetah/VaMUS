@@ -1,20 +1,7 @@
 <template>
     <ion-page>
         <ion-content :fullscreen="true">
-            <ion-header translucent>
-                <ion-toolbar>
-                    <ion-searchbar
-                            :value="searchValue"
-                            @ionChange="onSearch"
-                            debounce="500" 
-                            animated 
-                            show-cancel-button="focus"
-                            placeholder="Procure por Museus, Coleções ou Itens..."></ion-searchbar>
-                    <ion-progress-bar 
-                            v-if="isLoadingSomeEntity"
-                            type="indeterminate" />
-                </ion-toolbar>
-            </ion-header>
+            <SearchBar />
             <div id="mapId" style="width: 100%; height: 100%" />
         </ion-content>
     </ion-page>
@@ -25,27 +12,22 @@ import { defineComponent } from "vue";
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import {
     IonPage,
-    IonHeader,
-    IonToolbar,
-    IonSearchbar,
     IonContent,
-    IonProgressBar,
     popoverController
 } from "@ionic/vue";
+import SearchBar from '@/components/others/SearchBar.vue';
 import MapMarkerPopover from '@/components/others/MapMarkerPopover.vue';
 import * as L from "leaflet";
 
 export default defineComponent({
     name: "Map",
-    components: { IonHeader, IonToolbar, IonSearchbar, IonContent, IonPage, IonProgressBar },
+    components: { IonContent, IonPage, SearchBar },
     data(): {
         map: L.Map | undefined;
         markersLayer: L.FeatureGroup | undefined;
-        searchValue: string;
         isLoadingCollections: boolean;
         isLoadingItems: boolean;
         isLoadingInstitutes: boolean;
-        isLoadingSomeEntity: boolean;
         points: {
             id: number;
             lat: number;
@@ -64,10 +46,14 @@ export default defineComponent({
             isLoadingCollections: false,
             isLoadingItems: false,
             isLoadingInstitutes: false,
-            isLoadingSomeEntity: false,
-            searchValue: '',
             points: [ ],
         };
+    },
+    watch: {
+        searchValue() {
+            console.log(this.searchValue)
+            this.fetchContent();
+        }
     },
     computed: {
         ...mapGetters("institute", {
@@ -79,6 +65,9 @@ export default defineComponent({
         ...mapGetters("item", {
             items: "getItems",
         }),
+        ...mapGetters("search", {
+            searchValue: "getSearchValue",
+        })
     },
     methods: {
         ...mapActions("item", ["fetchItems"]),
@@ -87,6 +76,7 @@ export default defineComponent({
         ...mapMutations("item", ["setItemsByLocation", "setTotalItemsByLocation"]),
         ...mapMutations("collection", ["setCollectionsByLocation", "setTotalCollectionsByLocation"]),
         ...mapMutations("institute", ["setInstitutesByLocation", "setTotalInstitutesByLocation"]),
+        ...mapMutations("search", ["setIsLoadingSomeEntity"]),
         getIconUrlMarker(type: string) {
             switch (type) {
                 case '001': return 'assets/icon/marker-icon-1.png';
@@ -182,13 +172,9 @@ export default defineComponent({
             if (this.map) this.map.remove();
             this.map = undefined;
         },
-        onSearch(ev: CustomEvent) {
-            this.searchValue = ev.detail.value;
-            this.fetchContent();
-        },
         fetchContent() {
             // Start loading everbody
-            this.isLoadingSomeEntity = true;
+            this.setIsLoadingSomeEntity(true);
             
             // Load items
             this.isLoadingItems = true;
@@ -210,7 +196,7 @@ export default defineComponent({
 
             Promise.all([ itemsRequest, collectionsRequest, institutesRequest])
                 .then(() => {
-                    this.isLoadingSomeEntity = false;
+                    this.setIsLoadingSomeEntity(false);
                     this.populatePoints();
                     this.addMakers();
                 });

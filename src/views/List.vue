@@ -1,20 +1,7 @@
 <template>
     <ion-page>
         <ion-content :fullscreen="true">
-            <ion-header translucent>
-                <ion-toolbar>
-                    <ion-searchbar
-                            :value="searchValue"
-                            @ionChange="onSearch"
-                            debounce="500" 
-                            animated 
-                            show-cancel-button="focus"
-                            placeholder="Procure por Museus, Coleções ou Itens..."></ion-searchbar>
-                    <ion-progress-bar 
-                            v-if="isLoadingSomeEntity"
-                            type="indeterminate" />
-                </ion-toolbar>
-            </ion-header>
+            <SearchBar />
 
             <ion-list>
                 
@@ -33,55 +20,54 @@
 import { defineComponent } from "vue"
 import {
     IonPage,
-    IonHeader,
-    IonToolbar,
-    IonSearchbar,
     IonContent,
-    IonList,
-    IonProgressBar
+    IonList
 } from "@ionic/vue"
-import { mapActions } from "vuex"
+import { mapActions, mapMutations, mapGetters } from "vuex"
 import ItemsList from '@/components/lists/ItemsList.vue'
 import CollectionsList from '@/components/lists/CollectionsList.vue'
 import InstitutesList from '@/components/lists/InstitutesList.vue'
+import SearchBar from '@/components/others/SearchBar.vue';
 
 export default defineComponent({
     name: "List",
     components: {
-        IonHeader,
-        IonToolbar,
-        IonSearchbar,
         IonContent,
         IonPage,
         IonList,
-        IonProgressBar,
         ItemsList,
         CollectionsList,
-        InstitutesList
+        InstitutesList,
+        SearchBar
     },
     data() {
         return {
             isLoadingCollections: false,
             isLoadingItems: false,
             isLoadingInstitutes: false,
-            isLoadingSomeEntity: false,
-            searchValue: ''
         };
+    },
+    watch: {
+        searchValue() {
+            this.fetchContent();
+        }
     },
     mounted() {
         this.fetchContent();
+    },
+    computed: {
+        ...mapGetters("search", {
+            searchValue: "getSearchValue",
+        })
     },
     methods: {
         ...mapActions("item", ["fetchItems"]),
         ...mapActions("collection", ["fetchCollections"]),
         ...mapActions("institute", ["fetchInstitutes"]),
-        onSearch(ev: CustomEvent) {
-            this.searchValue = ev.detail.value;
-            this.fetchContent();
-        },
+        ...mapMutations("search", ["setIsLoadingSomeEntity"]),
         fetchContent() {
             // Start loading everbody
-            this.isLoadingSomeEntity = true;
+            this.setIsLoadingSomeEntity(true);
             
             // Load items
             this.isLoadingItems = true;
@@ -103,7 +89,7 @@ export default defineComponent({
 
             Promise.all([ itemsRequest, collectionsRequest, institutesRequest])
                 .then(() => {
-                    this.isLoadingSomeEntity = false;
+                    this.setIsLoadingSomeEntity(false);
                 });
         }
     },
