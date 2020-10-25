@@ -147,7 +147,7 @@
                     <collections-list is-institute-collections-list :is-loading-collections="isLoadingCollections" />
                 </div>
                 <div v-if="currentSegment === 'items'">
-                    <items-list :is-loading-items="isLoadingItems" />
+                    <items-list is-institute-items-list :is-loading-items="isLoadingItems" />
                 </div>
             </div>
         </ion-content>
@@ -196,6 +196,7 @@ export default defineComponent({
         IonCard,
         IonCardContent,
         IonImg,
+        ItemsList,
     },
     data() {
         return {

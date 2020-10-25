@@ -108,26 +108,31 @@ export const fetchInstituteItems = ({ commit }: any, {instituteId, params}: {ins
             .then(res => {
                 const instituteCollections = res.data;
                 const endpointItems = '/items?&';
-                const queryItemParams = {
-                    fetch_only:'title,description,document_type,document,document_as_html',  
-                    metaquery: [{
-                        key: 'collection_id',
-                        value: instituteCollections.map((e: any) => e.id),
-                        compare: 'IN'
-                    }]
-                };
-                tainacanApi.get(endpointItems + stringify(queryItemParams)).then(resItems => {
-                    const items = resItems.data.items;
-                    const totalItems = resItems.headers['x-wp-total'];
-                    console.log("items", items);
-                    commit('setInstituteItems', items);
-                    commit('setInstituteTotalItems', totalItems);
-                    resolve({ items, totalItems });
-                }).catch(error => {
-                    console.log(error);
-                    reject(error);
-                });
-                console.log(instituteCollections);
+                if(instituteCollections.length === 0 ) {
+                    commit('setInstituteItems', []);
+                    commit('setInstituteTotalItems', 0);
+                    resolve({ items:[], totalItems:0 });
+                } else {
+                    const queryItemParams = {
+                        fetch_only:'title,description,document_type,document,document_as_html,thumbnail',
+                        metaquery: [{
+                            key: 'collection_id',
+                            value: instituteCollections.map((e: any) => e.id),
+                            compare: 'IN'
+                        }]
+                    };
+                    tainacanApi.get(endpointItems + stringify(queryItemParams)).then(resItems => {
+                        const items = resItems.data.items;
+                        const totalItems = resItems.headers['x-wp-total'];
+                        console.log("items", items);
+                        commit('setInstituteItems', items);
+                        commit('setInstituteTotalItems', totalItems);
+                        resolve({ items, totalItems });
+                    }).catch(error => {
+                        console.log(error);
+                        reject(error);
+                    });
+                }
             }) 
             .catch(error => {
                 console.log(error);
