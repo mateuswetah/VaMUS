@@ -91,3 +91,52 @@ export const addItemAttachments = ({ commit }: any, itemId: string, page = '1') 
             });
     });
 };
+
+export const fetchInstituteItems = ({ commit }: any, {instituteId, params}: {instituteId: string; params: any}) => {
+    return new Promise((resolve, reject) => {
+        const endpoint = '/collections?'
+        const queryParams = {
+            ...params,  
+            metaquery: [{
+                key: 'vamus_institute_identifier_collection',
+                value: instituteId,
+                compare: 'IN'
+            }]
+        }
+
+        tainacanApi.get(endpoint + stringify(queryParams))
+            .then(res => {
+                const instituteCollections = res.data;
+                const endpointItems = '/items?&';
+                if(instituteCollections.length === 0 ) {
+                    commit('setInstituteItems', []);
+                    commit('setInstituteTotalItems', 0);
+                    resolve({ items:[], totalItems:0 });
+                } else {
+                    const queryItemParams = {
+                        fetch_only:'title,description,document_type,document,document_as_html,thumbnail',
+                        metaquery: [{
+                            key: 'collection_id',
+                            value: instituteCollections.map((e: any) => e.id),
+                            compare: 'IN'
+                        }]
+                    };
+                    tainacanApi.get(endpointItems + stringify(queryItemParams)).then(resItems => {
+                        const items = resItems.data.items;
+                        const totalItems = resItems.headers['x-wp-total'];
+                        console.log("items", items);
+                        commit('setInstituteItems', items);
+                        commit('setInstituteTotalItems', totalItems);
+                        resolve({ items, totalItems });
+                    }).catch(error => {
+                        console.log(error);
+                        reject(error);
+                    });
+                }
+            }) 
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
+    });
+};

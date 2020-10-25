@@ -59,6 +59,7 @@ export default defineComponent({
     },
     props: {
         isCollectionItemsList: Boolean,
+        isInstituteItemsList: Boolean,
         isItemsByLocationList: Boolean,
         isLoadingItems: Boolean
     },
@@ -68,6 +69,8 @@ export default defineComponent({
                 return this.getCollectionItems();
             else if (this.isItemsByLocationList)
                 return this.getItemsByLocation();
+            else if (this.isInstituteItemsList)
+                return this.getInstituteItems();
             else
                 return this.getItems();
         },
@@ -76,6 +79,8 @@ export default defineComponent({
                 return this.getCollectionTotalItems();
             else if (this.isItemsByLocationList)
                 return this.getTotalItemsByLocation();
+            else if (this.isInstituteItemsList)
+                return this.getInstituteTotalItems();
             else
                 return this.getTotalItems();
         }
@@ -87,7 +92,9 @@ export default defineComponent({
             "getCollectionItems",
             "getCollectionTotalItems",
             "getItemsByLocation",
-            "getTotalItemsByLocation"
+            "getTotalItemsByLocation",
+            "getInstituteItems",
+            "getInstituteTotalItems",
         ])
     }
 });

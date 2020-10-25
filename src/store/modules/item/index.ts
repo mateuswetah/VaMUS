@@ -10,7 +10,8 @@ const state = {
     itemsByLocation: Array<ItemModel>(),
     totalItems: 0,
     totalCollectionItems: 0,
-    totalItensByLocation: 0
+    totalItensByLocation: 0,
+    totalInstituteItems: 0
 };
 
 export default {
