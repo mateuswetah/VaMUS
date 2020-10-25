@@ -111,6 +111,7 @@ import {
     IonSegment,
     IonSegmentButton,
     IonLabel,
+    IonImg
 } from "@ionic/vue";
 import CollectionsList from '@/components/lists/CollectionsList.vue'
 
@@ -128,6 +129,7 @@ export default defineComponent({
         IonSegment,
         IonSegmentButton,
         IonLabel,
+        IonImg,
         CollectionsList
     },
     data() {

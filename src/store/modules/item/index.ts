@@ -4,9 +4,9 @@ import * as mutations from './mutations';
 import ItemModel from './models';
 
 const state = {
-    item: ItemModel,
-    items: [ ItemModel ],
-    collectionItems: [ ItemModel ],
+    item: new ItemModel(),
+    items: Array<ItemModel>(),
+    collectionItems: Array<ItemModel>(),
     totalItems: 0,
     totalCollectionItems: 0
 };

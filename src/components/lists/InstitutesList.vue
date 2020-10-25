@@ -4,28 +4,12 @@
             <ion-label>Museus</ion-label>
             <ion-note slot="end">{{ totalInstitutes}}</ion-note>
         </ion-item-divider>
-        <ion-item
-            button
-            :router-link="'/institute/' + institute.id"
-            v-for="(institute, index) of institutes"
-            :key="index"
-        >
-            <ion-thumbnail slot="start">
-                <ion-img
-                    v-if="institute['@files:avatar']?.url"
-                    :src="institute['@files:avatar']?.url"
-                />
-                <ion-skeleton-text v-else />
-            </ion-thumbnail>
-            <ion-label>
-                <h3>
-                    {{ institute.name }}
-                </h3>
-                <p>
-                    {{ institute.description }}
-                </p>
-            </ion-label>
-        </ion-item>
+
+        <institute-list-item
+                v-for="(institute, index) of institutes"
+                :key="index"
+                :institute="institute" />
+           
         <ion-item v-if="isLoadingInstitutes">
             <ion-thumbnail slot="start">
                 <ion-skeleton-text></ion-skeleton-text>
@@ -56,7 +40,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useRouter } from 'vue-router';
 import { mapGetters } from "vuex";
 import {
     IonSkeletonText,
@@ -66,8 +49,8 @@ import {
     IonNote,
     IonThumbnail,
     IonItem,
-    IonImg
 } from "@ionic/vue";
+import InstituteListItem from '@/components/list-items/InstituteListItem.vue';
 
 export default defineComponent({
     name: 'InstitutesList',
@@ -79,7 +62,7 @@ export default defineComponent({
         IonNote,
         IonThumbnail,
         IonItem,
-        IonImg
+        InstituteListItem
     },
     props: {
         isLoadingInstitutes: Boolean
@@ -89,10 +72,6 @@ export default defineComponent({
             institutes: "getInstitutes",
             totalInstitutes: "getTotalInstitutes",
         })
-    },
-    setup() {
-      const router = useRouter();
-      return { router };
     }
 })
 </script>

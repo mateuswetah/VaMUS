@@ -14,19 +14,7 @@
                     v-for="(item, index) of items"
                     :key="index"
                 >
-                    <ion-card :router-link="'/item/' + item.id">
-                        <ion-img
-                            v-if="
-                                item.thumbnail &&
-                                item.thumbnail.thumbnail &&
-                                item.thumbnail.thumbnail[0]
-                            "
-                            :src="item.thumbnail.thumbnail[0]"
-                        />
-                        <ion-card-header>
-                            <ion-card-title>{{ item.title }}</ion-card-title>
-                        </ion-card-header>
-                    </ion-card>
+                    <item-list-item :item="item" />
                 </ion-col>
             </ion-row>
             <ion-row v-else>
@@ -46,17 +34,14 @@ import { mapGetters } from "vuex";
 import {
     IonSkeletonText,
     IonLabel,
-    IonImg,
     IonItemGroup,
     IonItemDivider,
     IonGrid,
     IonCol,
     IonRow,
-    IonNote,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle
+    IonNote
 } from "@ionic/vue";
+import ItemListItem from '@/components/list-items/ItemListItem.vue';
 import ItemModel from '@/store/modules/item/models';
 
 export default defineComponent({
@@ -64,16 +49,13 @@ export default defineComponent({
     components: {
         IonSkeletonText,
         IonLabel,
-        IonImg,
         IonItemGroup,
         IonItemDivider,
         IonGrid,
         IonCol,
         IonRow,
         IonNote,
-        IonCard,
-        IonCardHeader,
-        IonCardTitle
+        ItemListItem
     },
     props: {
         isCollectionItemsList: Boolean,
