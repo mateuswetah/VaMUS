@@ -29,8 +29,10 @@ import {
     IonToolbar,
     IonSearchbar,
     IonContent,
-    IonProgressBar
+    IonProgressBar,
+    popoverController
 } from "@ionic/vue";
+import MapMarkerPopover from '@/components/others/MapMarkerPopover.vue';
 import * as L from "leaflet";
 
 export default defineComponent({
@@ -38,6 +40,7 @@ export default defineComponent({
     components: { IonHeader, IonToolbar, IonSearchbar, IonContent, IonPage, IonProgressBar },
     data(): {
         map: L.Map | undefined;
+        markersLayer: L.FeatureGroup | undefined;
         searchValue: string;
         isLoadingCollections: boolean;
         isLoadingItems: boolean;
@@ -57,6 +60,7 @@ export default defineComponent({
     } {
         return {
             map: undefined,
+            markersLayer: undefined,
             isLoadingCollections: false,
             isLoadingItems: false,
             isLoadingInstitutes: false,
@@ -132,11 +136,11 @@ export default defineComponent({
             if (this.map != undefined) {
 
                 // First we clear all markers
-                this.map.eachLayer((layer) => {
-                    layer.remove();
-                })
-
+                if (this.markersLayer != undefined)
+                    this.markersLayer.clearLayers();
+            
                 // Then insert markers based on the points array
+                const newMarkers = [];
                 for (let i = 0; i < this.points.length; i++) {
                     const defaultIcon = L.icon({
                         iconUrl: this.getIconUrlMarker(this.points[i].markerType),
@@ -149,15 +153,21 @@ export default defineComponent({
                     });
 
                     const objects = this.points[i].objects;
-                    
-                    L.marker([this.points[i].lat, this.points[i].long], {icon:defaultIcon})
-                        .addTo(this.map)
+
+                    newMarkers.push(L.marker([this.points[i].lat, this.points[i].long], { icon:defaultIcon })
                         .bindPopup(`
-                            instituição: ${(objects.institutes[0]).name} <br >
+                            instituição: ${(objects.institutes[0]||[]).name} <br >
                             Total coleções: ${(objects.collections||[]).length} <br >
                             Total itens: ${(objects.items||[]).length}
                         `)
+                    );
                 }
+                
+                // Adds them to feature group layer so we can zoom and clear them easily
+                this.markersLayer = L.featureGroup(newMarkers)
+                    .addTo(this.map);
+
+                this.map.flyToBounds(this.markersLayer.getBounds());
             }
         },
         ionViewDidEnter() {
@@ -204,6 +214,17 @@ export default defineComponent({
                     this.populatePoints();
                     this.addMakers();
                 });
+        },
+        async openPopover(ev: any) {
+            console.log('dgsdf')
+            const popover = await popoverController
+                .create({
+                    component: MapMarkerPopover,
+                    cssClass: 'my-custom-class',
+                    event: ev,
+                    translucent: true
+                })
+            return popover.present();
         }
     },
 }); 
