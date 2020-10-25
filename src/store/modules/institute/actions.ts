@@ -56,6 +56,7 @@ export const fetchInstitutes = ({ commit, rootGetters }: any, { search }: { sear
             'id',
             'name',
             'shortDescription',
+            'endereco',
             'location',
             'mus_cod',
             'location.*',

@@ -5,11 +5,29 @@
 
             <ion-list>
                 
-                <items-list :is-loading-items="isLoadingItems" />
+                <ion-segment v-model="currentSegment">
+                    <ion-segment-button value="items">
+                        <ion-label>Itens <span v-if="!isNaN(totalItems)">({{ totalItems }})</span></ion-label>
+                    </ion-segment-button>
+                    <ion-segment-button value="collections">
+                        <ion-label>Coleções <span v-if="!isNaN(totalCollections)">({{ totalCollections }})</span></ion-label>
+                    </ion-segment-button>
+                    <ion-segment-button value="institutes">
+                        <ion-label>Institutes <span v-if="!isNaN(totalInstitutes)">({{ totalInstitutes }})</span></ion-label>
+                    </ion-segment-button>
+                </ion-segment>
 
-                <collections-list :is-loading-collections="isLoadingCollections" />
+                <items-list 
+                        v-if="currentSegment === 'items'"
+                        :is-loading-items="isLoadingItems" />
 
-                <institutes-list :is-loading-institutes="isLoadingInstitutes" />
+                <collections-list 
+                        v-if="currentSegment === 'collections'"
+                        :is-loading-collections="isLoadingCollections" />
+
+                <institutes-list 
+                        v-if="currentSegment === 'institutes'"
+                        :is-loading-institutes="isLoadingInstitutes" />
             
             </ion-list>
         </ion-content>
@@ -21,7 +39,10 @@ import { defineComponent } from "vue"
 import {
     IonPage,
     IonContent,
-    IonList
+    IonList,
+    IonSegment,
+    IonSegmentButton,
+    IonLabel
 } from "@ionic/vue"
 import { mapActions, mapMutations, mapGetters } from "vuex"
 import ItemsList from '@/components/lists/ItemsList.vue'
@@ -35,6 +56,9 @@ export default defineComponent({
         IonContent,
         IonPage,
         IonList,
+        IonLabel,
+        IonSegment,
+        IonSegmentButton,
         ItemsList,
         CollectionsList,
         InstitutesList,
@@ -45,6 +69,7 @@ export default defineComponent({
             isLoadingCollections: false,
             isLoadingItems: false,
             isLoadingInstitutes: false,
+            currentSegment: 'items'
         };
     },
     watch: {
@@ -58,6 +83,15 @@ export default defineComponent({
     computed: {
         ...mapGetters("search", {
             searchValue: "getSearchValue",
+        }),
+        ...mapGetters("item", {
+            totalItems: "getTotalItems",
+        }),
+        ...mapGetters("collection", {
+            totalCollections: "getTotalCollections",
+        }),
+        ...mapGetters("institute", {
+            totalInstitutes: "getTotalInstitutes",
         })
     },
     methods: {
@@ -71,7 +105,7 @@ export default defineComponent({
             
             // Load items
             this.isLoadingItems = true;
-            const itemsRequest = this.fetchItems({ perpage: 6, orderby: 'relevance', search: this.searchValue })
+            const itemsRequest = this.fetchItems({ perpage: 24, orderby: 'relevance', search: this.searchValue })
                 .then(() => (this.isLoadingItems = false))
                 .catch(() => (this.isLoadingItems = false));
 

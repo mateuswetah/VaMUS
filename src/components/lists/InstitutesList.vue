@@ -1,6 +1,6 @@
 <template>
     <ion-item-group v-if="totalInstitutes">
-        <ion-item-divider>
+        <ion-item-divider v-if="isInstitutesByLocationList">
             <ion-label>Museus</ion-label>
             <ion-note slot="end">{{ totalInstitutes }}</ion-note>
         </ion-item-divider>

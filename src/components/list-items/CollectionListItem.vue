@@ -15,9 +15,9 @@
             <ion-skeleton-text v-else />
         </ion-thumbnail>
         <ion-label>
-            <h3>
+            <h2>
                 {{ collection.name }}
-            </h3>
+            </h2>
             <p>
                 {{ collection.description }}
             </p>

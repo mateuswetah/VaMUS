@@ -178,7 +178,7 @@ export default defineComponent({
             
             // Load items
             this.isLoadingItems = true;
-            const itemsRequest = this.fetchItems({ perpage: 6, orderby: 'relevance', search: this.searchValue })
+            const itemsRequest = this.fetchItems({ perpage: 24, orderby: 'relevance', search: this.searchValue })
                 .then(() => (this.isLoadingItems = false))
                 .catch(() => (this.isLoadingItems = false));
 

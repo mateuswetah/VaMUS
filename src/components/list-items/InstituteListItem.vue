@@ -11,11 +11,11 @@
             <ion-skeleton-text v-else />
         </ion-thumbnail>
         <ion-label>
-            <h3>
+            <h2>
                 {{ institute.name }}
-            </h3>
+            </h2>
             <p>
-                {{ institute.description }}
+                {{ institute.endereco }}
             </p>
         </ion-label>
     </ion-item>
