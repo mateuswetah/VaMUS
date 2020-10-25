@@ -44,86 +44,84 @@
                 </ion-segment>
 
                 <div v-if="currentSegment === 'about'">
-                    <ion-card>
-                        <ion-card-content>
-                            <div v-if="!isLoadingInstitute">
-                                <ion-text color="dark">
-                                    <h5><b>Nome</b></h5>
-                                    {{institute.name}}
-                                </ion-text>
-                                <hr >
-                                <ion-text color="dark">
-                                    <h5><b>Código</b></h5>
-                                    {{institute.mus_cod}}
-                                </ion-text>
-                                <hr >
-                                <ion-text color="dark">
-                                    <h5><b>Nº SNIIC</b></h5>
-                                    {{institute.num_sniic}}
-                                </ion-text>
-                                <hr >
-                                <ion-text color="dark">
-                                    <h5><b>Descrição</b></h5>
-                                    {{institute.shortDescription}}
-                                </ion-text>
-                                <hr >
-                                <ion-text color="dark">
-                                    <h5><b>Esfera</b></h5>
-                                    {{institute.esfera}} / {{institute.esfera_tipo}}
-                                </ion-text>
-                                <hr >
-                                <ion-text color="dark">
-                                    <h5><b>Instituição mantenedora</b></h5>
-                                    {{institute.mus_instituicaoMantenedora}}
-                                </ion-text>
-                                <hr >
-                                <ion-text color="dark">
-                                    <h5><b>Tipo</b></h5>
-                                    {{institute.mus_tipo_tematica}}
-                                </ion-text>
-                                <hr >
-                                <ion-text color="dark">
-                                    <h5><b>Logradouro</b></h5>
-                                    {{institute.En_Nome_Logradouro}}
-                                </ion-text>
-                                <hr >
-                                <ion-text color="dark">
-                                    <h5><b>Bairro</b></h5>
-                                    {{institute.En_Bairro}}
-                                </ion-text>
-                                <hr >
-                                <ion-text color="dark">
-                                    <h5><b>Município</b></h5>
-                                    {{institute.En_Municipio}}
-                                </ion-text>
-                                <hr >
-                                <ion-text color="dark">
-                                    <h5><b>Estado</b></h5>
-                                    {{institute.En_Estado}}
-                                </ion-text>
-                                <hr >
-                                <ion-text color="dark">
-                                    <h5><b>Endereço</b></h5>
-                                    {{institute.endereco}}
-                                </ion-text>
-                                <hr >
-                                <ion-text color="dark">
-                                    <h5><b>Site</b></h5>
-                                    {{institute.site}}
-                                </ion-text>
-                                <hr >
-                                <ion-text color="dark">
-                                    <h5><b>facebook</b></h5>
-                                    {{institute.facebook}}
-                                </ion-text>
-                                <hr >
-                                <ion-text color="dark">
-                                    <h5><b>instagram</b></h5>
-                                    {{institute.instagram}}
-                                </ion-text>
-                            </div>
-                        </ion-card-content>>
-                    </ion-card>
+                    <div class="ion-padding">
+                        <div v-if="!isLoadingInstitute">
+                            <ion-text color="dark">
+                                <h5><b>Nome</b></h5>
+                                {{institute.name}}
+                            </ion-text>
+                            <hr >
+                            <ion-text color="dark">
+                                <h5><b>Código</b></h5>
+                                {{institute.mus_cod}}
+                            </ion-text>
+                            <hr >
+                            <ion-text color="dark">
+                                <h5><b>Nº SNIIC</b></h5>
+                                {{institute.num_sniic}}
+                            </ion-text>
+                            <hr >
+                            <ion-text color="dark">
+                                <h5><b>Descrição</b></h5>
+                                {{institute.shortDescription}}
+                            </ion-text>
+                            <hr >
+                            <ion-text color="dark">
+                                <h5><b>Esfera</b></h5>
+                                {{institute.esfera}} / {{institute.esfera_tipo}}
+                            </ion-text>
+                            <hr >
+                            <ion-text color="dark">
+                                <h5><b>Instituição mantenedora</b></h5>
+                                {{institute.mus_instituicaoMantenedora}}
+                            </ion-text>
+                            <hr >
+                            <ion-text color="dark">
+                                <h5><b>Tipo</b></h5>
+                                {{institute.mus_tipo_tematica}}
+                            </ion-text>
+                            <hr >
+                            <ion-text color="dark">
+                                <h5><b>Logradouro</b></h5>
+                                {{institute.En_Nome_Logradouro}}
+                            </ion-text>
+                            <hr >
+                            <ion-text color="dark">
+                                <h5><b>Bairro</b></h5>
+                                {{institute.En_Bairro}}
+                            </ion-text>
+                            <hr >
+                            <ion-text color="dark">
+                                <h5><b>Município</b></h5>
+                                {{institute.En_Municipio}}
+                            </ion-text>
+                            <hr >
+                            <ion-text color="dark">
+                                <h5><b>Estado</b></h5>
+                                {{institute.En_Estado}}
+                            </ion-text>
+                            <hr >
+                            <ion-text color="dark">
+                                <h5><b>Endereço</b></h5>
+                                {{institute.endereco}}
+                            </ion-text>
+                            <hr >
+                            <ion-text color="dark">
+                                <h5><b>Site</b></h5>
+                                {{institute.site}}
+                            </ion-text>
+                            <hr >
+                            <ion-text color="dark">
+                                <h5><b>facebook</b></h5>
+                                {{institute.facebook}}
+                            </ion-text>
+                            <hr >
+                            <ion-text color="dark">
+                                <h5><b>instagram</b></h5>
+                                {{institute.instagram}}
+                            </ion-text>
+                        </div>
+                    </div>
                     
                 </div>
                 <div v-if="currentSegment === 'events'">
@@ -136,11 +134,11 @@
                                 </p>
                             </ion-card-content>
                         </ion-card>
-                        <ion-card v-if="!institute.events.length">
-                            <ion-card-content>
-                                Não existe eventos
-                            </ion-card-content>
-                        </ion-card>
+                        <p  
+                                class="ion-padding"
+                                v-if="!institute.events.length">
+                            Não foram econtrados eventos aqui.
+                        </p>
                     </div>
                 </div>
                 <div v-if="currentSegment === 'collections'">

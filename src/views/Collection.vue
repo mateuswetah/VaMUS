@@ -39,7 +39,7 @@
                     </ion-segment-button>
                 </ion-segment>
 
-                <div v-if="currentSegment === 'info'">
+                <div class="ion-padding" v-if="currentSegment === 'info'">
                     <p>{{ collection.description }}</p>
                 </div>
                 <div v-if="currentSegment === 'items'">
