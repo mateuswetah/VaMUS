@@ -43,3 +43,51 @@ export const fetchCollectionItems = ({ commit }: any, { collectionId, params }: 
             });
     });
 };
+
+export const fetchItem = ({ commit }: any, itemId: string) => {
+    return new Promise((resolve, reject) => { 
+        const endpoint = `/items/${itemId}?&fetch_only=title,description,document_type,document,document_as_html`;
+        tainacanApi.get(endpoint)
+            .then(res => {
+                const item = res.data;
+                commit('setItem', item);
+                resolve(item);
+            })
+            .catch(error => {
+                console.error(error);
+                reject(error);
+            });
+    });
+};
+
+export const fetchItemMetadata = ({ commit }: any, itemId: string) => {
+    return new Promise((resolve, reject) => {
+        const endpoint = `/item/${itemId}/metadata`;
+        tainacanApi.get(endpoint)
+            .then(res => {
+                const metadata = (res.data||[]).map( (meta: any) => ({label:meta.metadatum.name, value:meta.value_as_string }));
+                commit('setItemMetadata', metadata);
+                resolve(metadata);
+            })
+            .catch(error => {
+                console.error(error);
+                reject(error);
+            });
+    });
+};
+
+export const addItemAttachments = ({ commit }: any, itemId: string, page = '1') => {
+    return new Promise((resolve, reject) => {
+        const endpoint = `/items/${itemId}/attachments?order=ASC&orderby=menu_order&perpage=24&paged=${page}`;
+        tainacanApi.get(endpoint)
+            .then(res => {
+                const attachments = (res.data||[]).map( (att: any) => ({url:att.url}));
+                commit('addItemAttachments', attachments);
+                resolve(attachments);
+            })
+            .catch(error => {
+                console.error(error);
+                reject(error);
+            });
+    });
+};
