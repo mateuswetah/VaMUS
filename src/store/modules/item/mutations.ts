@@ -22,6 +22,10 @@ export const setCollectionItems = (state: any, collectionItems: []) => {
     state.collectionItems = collectionItems;
 }
 
+export const setInstituteItems = (state: any, instituteItems: []) => {
+    state.instituteItems = instituteItems;
+}
+
 export const setTotalItems = (state: any, totalItems: number) => {
     state.totalItems = totalItems;
 }
@@ -29,3 +33,7 @@ export const setTotalItems = (state: any, totalItems: number) => {
 export const setTotalCollectionItems = (state: any, totalCollectionItems: number) => {
     state.totalCollectionItems = totalCollectionItems;
 }
+
+export const setInstituteTotalItems = (state: any, totalInstituteItems: number) => {
+    state.totalInstituteItems = totalInstituteItems;
+};

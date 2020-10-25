@@ -27,7 +27,6 @@ export const fetchInstituteAbout = ({ commit }: any, instituteId: string) => new
     mapasApi.get(endpoint).then(res => {
         const institute = (Array.isArray(res.data) ? res.data[0] : res.data);
         Object.keys(institute).forEach(e => { if( !['@files:avatar', '@files:header'].includes(e) && !fields.includes(e)) delete institute[e]} )
-        console.log(institute);
         commit('setInstitute', institute);
         resolve({institute});
     }).catch(error => {

@@ -7,8 +7,10 @@ const state = {
     item: ItemModel,
     items: [ ItemModel ],
     collectionItems: [ ItemModel ],
+    instituteItems: [ ItemModel ],
     totalItems: 0,
-    totalCollectionItems: 0
+    totalCollectionItems: 0,
+    totalInstituteItems: 0
 };
 
 export default {
