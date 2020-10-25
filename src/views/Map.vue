@@ -10,9 +10,11 @@
                             animated 
                             show-cancel-button="focus"
                             placeholder="Procure por Museus, Coleções ou Itens..."></ion-searchbar>
+                    <ion-progress-bar 
+                            v-if="isLoadingSomeEntity"
+                            type="indeterminate" />
                 </ion-toolbar>
             </ion-header>
-
             <div id="mapId" style="width: 100%; height: 100%" />
         </ion-content>
     </ion-page>
@@ -20,22 +22,27 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import {
     IonPage,
     IonHeader,
     IonToolbar,
     IonSearchbar,
     IonContent,
+    IonProgressBar
 } from "@ionic/vue";
 import * as L from "leaflet";
 
 export default defineComponent({
     name: "Map",
-    components: { IonHeader, IonToolbar, IonSearchbar, IonContent, IonPage },
+    components: { IonHeader, IonToolbar, IonSearchbar, IonContent, IonPage, IonProgressBar },
     data(): {
         map: L.Map | undefined;
         searchValue: string;
+        isLoadingCollections: boolean;
+        isLoadingItems: boolean;
+        isLoadingInstitutes: boolean;
+        isLoadingSomeEntity: boolean;
         points: {
             id: number;
             lat: number;
@@ -50,6 +57,10 @@ export default defineComponent({
     } {
         return {
             map: undefined,
+            isLoadingCollections: false,
+            isLoadingItems: false,
+            isLoadingInstitutes: false,
+            isLoadingSomeEntity: false,
             searchValue: '',
             points: [ ],
         };
@@ -66,6 +77,9 @@ export default defineComponent({
         }),
     },
     methods: {
+        ...mapActions("item", ["fetchItems"]),
+        ...mapActions("collection", ["fetchCollections"]),
+        ...mapActions("institute", ["fetchInstitutes"]),
         getIconUrlMarker(type: string) {
             switch (type) {
                 case '001': return 'assets/icon/marker-icon-1.png';
@@ -114,42 +128,82 @@ export default defineComponent({
                 }
             }
         },
+        addMakers() {
+            if (this.map != undefined) {
+
+                // First we clear all markers
+                this.map.eachLayer((layer) => {
+                    layer.remove();
+                })
+
+                // Then insert markers based on the points array
+                for (let i = 0; i < this.points.length; i++) {
+                    const defaultIcon = L.icon({
+                        iconUrl: this.getIconUrlMarker(this.points[i].markerType),
+                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                        iconSize: [14, 26],
+                        iconAnchor: [8, 26],
+                        popupAnchor: [-3, -38],
+                        shadowSize: [14, 26],
+                        shadowAnchor: [4, 26]
+                    });
+
+                    const objects = this.points[i].objects;
+                    
+                    L.marker([this.points[i].lat, this.points[i].long], {icon:defaultIcon})
+                        .addTo(this.map)
+                        .bindPopup(`
+                            instituição: ${(objects.institutes[0]).name} <br >
+                            Total coleções: ${(objects.collections||[]).length} <br >
+                            Total itens: ${(objects.items||[]).length}
+                        `)
+                }
+            }
+        },
         ionViewDidEnter() {
-            this.populatePoints();
             this.map = L.map("mapId").setView([-15.809365, -49.521065], 5);
 
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: "Instituições culturais",
             }).addTo(this.map);
 
-            for (let i = 0; i < this.points.length; i++) {
-                const defaultIcon = L.icon({
-                    iconUrl: this.getIconUrlMarker(this.points[i].markerType),
-                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                    iconSize: [14, 26],
-                    iconAnchor: [8, 26],
-                    popupAnchor: [-3, -38],
-                    shadowSize: [14, 26],
-                    shadowAnchor: [4, 26]
-                });
-
-                const objects = this.points[i].objects;
-                
-
-                L.marker([this.points[i].lat, this.points[i].long], {icon:defaultIcon})
-                .addTo(this.map)
-                .bindPopup(`
-                    instituição: ${(objects.institutes[0]).name} <br >
-                    Total coleções: ${(objects.collections||[]).length} <br >
-                    Total itens: ${(objects.items||[]).length}
-                `)
-            }
+            this.fetchContent();
         },
         ionViewWillLeave() {
             if (this.map) this.map.remove();
         },
         onSearch(ev: CustomEvent) {
             this.searchValue = ev.detail.value;
+            this.fetchContent();
+        },
+        fetchContent() {
+            // Start loading everbody
+            this.isLoadingSomeEntity = true;
+            
+            // Load items
+            this.isLoadingItems = true;
+            const itemsRequest = this.fetchItems({ perpage: 6, orderby: 'relevance', search: this.searchValue })
+                .then(() => (this.isLoadingItems = false))
+                .catch(() => (this.isLoadingItems = false));
+
+            // Load collections
+            this.isLoadingCollections = true;
+            const collectionsRequest = this.fetchCollections({ search: this.searchValue })
+                .then(() => (this.isLoadingCollections = false))
+                .catch(() => (this.isLoadingCollections = false));
+
+            // Load institutes
+            this.isLoadingInstitutes = true;
+            const institutesRequest = this.fetchInstitutes({ search: this.searchValue })
+                .then(() => (this.isLoadingInstitutes = false))
+                .catch(() => (this.isLoadingInstitutes = false));
+
+            Promise.all([ itemsRequest, collectionsRequest, institutesRequest])
+                .then(() => {
+                    this.isLoadingSomeEntity = false;
+                    this.populatePoints();
+                    this.addMakers();
+                });
         }
     },
 }); 

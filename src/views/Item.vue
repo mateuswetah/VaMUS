@@ -72,6 +72,7 @@ import {
     IonCardContent,
     IonCardTitle,
     IonText,
+    IonTitle
 } from "@ionic/vue";
 
 export default defineComponent({
@@ -92,6 +93,7 @@ export default defineComponent({
         IonCardContent, 
         IonCardTitle,
         IonText,
+        IonTitle
     },
     setup() {
         // Optional parameters to pass to the swiper instance. See http://idangero.us/swiper/api/ for valid options.

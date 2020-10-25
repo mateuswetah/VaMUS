@@ -10,6 +10,9 @@
                             animated 
                             show-cancel-button="focus"
                             placeholder="Procure por Museus, Coleções ou Itens..."></ion-searchbar>
+                    <ion-progress-bar 
+                            v-if="isLoadingSomeEntity"
+                            type="indeterminate" />
                 </ion-toolbar>
             </ion-header>
 
@@ -34,7 +37,8 @@ import {
     IonToolbar,
     IonSearchbar,
     IonContent,
-    IonList
+    IonList,
+    IonProgressBar
 } from "@ionic/vue"
 import { mapActions } from "vuex"
 import ItemsList from '@/components/ItemsList.vue'
@@ -50,6 +54,7 @@ export default defineComponent({
         IonContent,
         IonPage,
         IonList,
+        IonProgressBar,
         ItemsList,
         CollectionsList,
         InstitutesList
@@ -59,6 +64,7 @@ export default defineComponent({
             isLoadingCollections: false,
             isLoadingItems: false,
             isLoadingInstitutes: false,
+            isLoadingSomeEntity: false,
             searchValue: ''
         };
     },
@@ -74,23 +80,31 @@ export default defineComponent({
             this.fetchContent();
         },
         fetchContent() {
+            // Start loading everbody
+            this.isLoadingSomeEntity = true;
+            
             // Load items
             this.isLoadingItems = true;
-            this.fetchItems({ perpage: 6, orderby: 'relevance', search: this.searchValue })
+            const itemsRequest = this.fetchItems({ perpage: 6, orderby: 'relevance', search: this.searchValue })
                 .then(() => (this.isLoadingItems = false))
                 .catch(() => (this.isLoadingItems = false));
 
             // Load collections
             this.isLoadingCollections = true;
-            this.fetchCollections({ search: this.searchValue })
+            const collectionsRequest = this.fetchCollections({ search: this.searchValue })
                 .then(() => (this.isLoadingCollections = false))
                 .catch(() => (this.isLoadingCollections = false));
 
             // Load institutes
             this.isLoadingInstitutes = true;
-            this.fetchInstitutes({ search: this.searchValue })
+            const institutesRequest = this.fetchInstitutes({ search: this.searchValue })
                 .then(() => (this.isLoadingInstitutes = false))
                 .catch(() => (this.isLoadingInstitutes = false));
+
+            Promise.all([ itemsRequest, collectionsRequest, institutesRequest])
+                .then(() => {
+                    this.isLoadingSomeEntity = false;
+                });
         }
     },
 });
