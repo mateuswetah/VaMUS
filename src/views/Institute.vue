@@ -112,7 +112,7 @@ import {
     IonSegmentButton,
     IonLabel,
 } from "@ionic/vue";
-import CollectionsList from '@/components/CollectionsList.vue'
+import CollectionsList from '@/components/lists/CollectionsList.vue'
 
 export default defineComponent({
     name: 'InstitutePage',

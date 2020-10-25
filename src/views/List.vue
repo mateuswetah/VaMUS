@@ -41,9 +41,9 @@ import {
     IonProgressBar
 } from "@ionic/vue"
 import { mapActions } from "vuex"
-import ItemsList from '@/components/ItemsList.vue'
-import CollectionsList from '@/components/CollectionsList.vue'
-import InstitutesList from '@/components/InstitutesList.vue'
+import ItemsList from '@/components/lists/ItemsList.vue'
+import CollectionsList from '@/components/lists/CollectionsList.vue'
+import InstitutesList from '@/components/lists/InstitutesList.vue'
 
 export default defineComponent({
     name: "List",
