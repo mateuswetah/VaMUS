@@ -1,14 +1,15 @@
 <template>
     <ion-page>
-        <ion-header>
-            <ion-toolbar>
-                <ion-title>VaMUS</ion-title>
-            </ion-toolbar>
-        </ion-header>
         <ion-content :fullscreen="true">
-            <ion-header collapse="condense">
+            <ion-header translucent>
                 <ion-toolbar>
-                    <ion-title size="large">VaMUS</ion-title>
+                    <ion-searchbar
+                            :value="searchValue"
+                            @ionChange="onSearch"
+                            debounce="500" 
+                            animated 
+                            show-cancel-button="focus"
+                            placeholder="Procure por Museus, Coleções ou Itens..."></ion-searchbar>
                 </ion-toolbar>
             </ion-header>
 
@@ -31,7 +32,7 @@ import {
     IonPage,
     IonHeader,
     IonToolbar,
-    IonTitle,
+    IonSearchbar,
     IonContent,
     IonList
 } from "@ionic/vue"
@@ -45,7 +46,7 @@ export default defineComponent({
     components: {
         IonHeader,
         IonToolbar,
-        IonTitle,
+        IonSearchbar,
         IonContent,
         IonPage,
         IonList,
@@ -57,32 +58,40 @@ export default defineComponent({
         return {
             isLoadingCollections: false,
             isLoadingItems: false,
-            isLoadingInstitutes: false
+            isLoadingInstitutes: false,
+            searchValue: ''
         };
     },
     mounted() {
-        // Load items
-        this.isLoadingItems = true;
-        this.fetchItems({ perpage: 6, orderby: 'relevance' })
-            .then(() => (this.isLoadingItems = false))
-            .catch(() => (this.isLoadingItems = false));
-
-        // Load collections
-        this.isLoadingCollections = true;
-        this.fetchCollections()
-            .then(() => (this.isLoadingCollections = false))
-            .catch(() => (this.isLoadingCollections = false));
-
-        // Load institutes
-        this.isLoadingInstitutes = true;
-        this.fetchInstitutes()
-            .then(() => (this.isLoadingInstitutes = false))
-            .catch(() => (this.isLoadingInstitutes = false));
+        this.fetchContent();
     },
     methods: {
         ...mapActions("item", ["fetchItems"]),
         ...mapActions("collection", ["fetchCollections"]),
         ...mapActions("institute", ["fetchInstitutes"]),
+        onSearch(ev: CustomEvent) {
+            this.searchValue = ev.detail.value;
+            this.fetchContent();
+        },
+        fetchContent() {
+            // Load items
+            this.isLoadingItems = true;
+            this.fetchItems({ perpage: 6, orderby: 'relevance', search: this.searchValue })
+                .then(() => (this.isLoadingItems = false))
+                .catch(() => (this.isLoadingItems = false));
+
+            // Load collections
+            this.isLoadingCollections = true;
+            this.fetchCollections({ search: this.searchValue })
+                .then(() => (this.isLoadingCollections = false))
+                .catch(() => (this.isLoadingCollections = false));
+
+            // Load institutes
+            this.isLoadingInstitutes = true;
+            this.fetchInstitutes({ search: this.searchValue })
+                .then(() => (this.isLoadingInstitutes = false))
+                .catch(() => (this.isLoadingInstitutes = false));
+        }
     },
 });
 </script>

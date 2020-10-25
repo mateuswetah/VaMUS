@@ -50,7 +50,7 @@ export const fetchInstituteEvents = ({ commit }: any, instituteId: string) => ne
     });
 });
 
-export const fetchInstitutes = ({ commit, rootGetters }: any) => {
+export const fetchInstitutes = ({ commit, rootGetters }: any, { search }: { search: string}) => {
     return new Promise((resolve, reject) => { 
         const endpoint = '/space/find?';
         const fields = [
@@ -64,8 +64,10 @@ export const fetchInstitutes = ({ commit, rootGetters }: any) => {
         ];
         const ids = new Set(rootGetters['collection/getInstitutesIds'].filter((id: string) => id != ''));
         const idsLimit = ids.size ? (ids.size > 1 ? `&id=in(${ [...ids].join(',') })` : `&id=eq(${ [...ids].join(',') })`) : ''
+
+        const searchValue = search ? `&@keyword=${search}` : ''
         
-        mapasApi.get(endpoint + `@limit=12&@select=${fields.join(',')}&@files=(avatar,header):name,url)${idsLimit}`)
+        mapasApi.get(endpoint + `@limit=12&@select=${fields.join(',')}&@files=(avatar,header):name,url)${idsLimit}${searchValue}`)
             .then(res => {
                 const institutes = res.data;
                 const totalInstitutes = ids.size;

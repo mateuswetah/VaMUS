@@ -1,14 +1,15 @@
 <template>
     <ion-page>
-        <ion-header :transluscent="true">
-            <ion-toolbar>
-                <ion-title>VaMUS</ion-title>
-            </ion-toolbar>
-        </ion-header>
         <ion-content :fullscreen="true">
-            <ion-header collapse="condense">
+            <ion-header translucent>
                 <ion-toolbar>
-                    <ion-title size="large">VaMUS</ion-title>
+                    <ion-searchbar
+                            :value="searchValue"
+                            @ionChange="onSearch"
+                            debounce="500" 
+                            animated 
+                            show-cancel-button="focus"
+                            placeholder="Procure por Museus, Coleções ou Itens..."></ion-searchbar>
                 </ion-toolbar>
             </ion-header>
 
@@ -23,19 +24,21 @@ import {
     IonPage,
     IonHeader,
     IonToolbar,
-    IonTitle,
+    IonSearchbar,
     IonContent,
 } from "@ionic/vue";
 import * as L from "leaflet";
 
 export default defineComponent({
     name: "Map",
-    components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage },
+    components: { IonHeader, IonToolbar, IonSearchbar, IonContent, IonPage },
     data(): {
         map: L.Map | undefined;
+        searchValue: string;
     } {
         return {
             map: undefined,
+            searchValue: ''
         };
     },
     methods: {
@@ -54,6 +57,9 @@ export default defineComponent({
         ionViewWillLeave() {
             if (this.map) this.map.remove();
         },
+        onSearch(ev: CustomEvent) {
+            this.searchValue = ev.detail.value;
+        }
     },
 }); 
 </script>
