@@ -10,16 +10,18 @@
                     size="4"
                     v-for="(item, index) of items"
                     :key="index"
-                >   
-                    <ion-img
-                        v-if="
-                            item.thumbnail &&
-                            item.thumbnail.thumbnail &&
-                            item.thumbnail.thumbnail[0]
-                        "
-                        :src="item.thumbnail.thumbnail[0]"
-                    />
-                    <ion-label>{{ item.title }}</ion-label>
+                >
+                    <router-link :to="'/item/' + item.id">
+                        <ion-img
+                            v-if="
+                                item.thumbnail &&
+                                item.thumbnail.thumbnail &&
+                                item.thumbnail.thumbnail[0]
+                            "
+                            :src="item.thumbnail.thumbnail[0]"
+                        />
+                        <ion-label>{{ item.title }}</ion-label>
+                    </router-link>
                 </ion-col>
             </ion-row>
             <ion-row v-else>
@@ -45,7 +47,7 @@ import {
     IonGrid,
     IonCol,
     IonRow,
-    IonNote
+    IonNote,
 } from "@ionic/vue";
 import ItemModel from '@/store/modules/item/models';
 
@@ -60,7 +62,7 @@ export default defineComponent({
         IonGrid,
         IonCol,
         IonRow,
-        IonNote
+        IonNote,
     },
     props: {
         isCollectionItemsList: Boolean,

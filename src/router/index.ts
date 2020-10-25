@@ -33,6 +33,10 @@ const routes: Array<RouteRecordRaw> = [
     path: '/institute/:instituteId',
     component: () => import('@/views/Institute.vue')
   },
+  {
+    path: '/item/:itemId',
+    component: () => import('@/views/Item.vue')
+  },
 ]
 
 const router = createRouter({
