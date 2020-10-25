@@ -17,3 +17,11 @@ export const getTotalItems = (state: any) => {
 export const getCollectionTotalItems = (state: any) => {
     return state.totalCollectionItems;
 };
+
+export const getItemsByLocation = (state: any) => {
+    return state.itemsByLocation;
+};
+
+export const getTotalItemsByLocation = (state: any) => {
+    return state.totalItemsByLocation;
+};

@@ -16,3 +16,11 @@ export const setInstitutes = (state: any, institutes: [ InstituteModel ] ) => {
 export const setTotalInstitutes = (state: any, totalInstitutes: number ) => {
     state.totalInstitutes = totalInstitutes;
 }
+
+export const setInstitutesByLocation = (state: any, institutesByLocation: []) => {
+    state.institutesByLocation = institutesByLocation;
+}
+
+export const setTotalInstitutesByLocation = (state: any, totalInstitutesByLocation: number) => {
+    state.totalInstitutesByLocation = totalInstitutesByLocation;
+}

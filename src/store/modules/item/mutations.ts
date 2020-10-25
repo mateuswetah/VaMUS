@@ -29,3 +29,11 @@ export const setTotalItems = (state: any, totalItems: number) => {
 export const setTotalCollectionItems = (state: any, totalCollectionItems: number) => {
     state.totalCollectionItems = totalCollectionItems;
 }
+
+export const setItemsByLocation = (state: any, itemsByLocation: []) => {
+    state.itemsByLocation = itemsByLocation;
+}
+
+export const setTotalItemsByLocation = (state: any, totalItemsByLocation: number) => {
+    state.totalItemsByLocation = totalItemsByLocation;
+}

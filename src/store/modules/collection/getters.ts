@@ -21,3 +21,11 @@ export const getInstituteTotalCollections = (state: any) => {
 export const getInstitutesIds = (state: any) => {
     return state.institutesIds;
 }
+
+export const getCollectionsByLocation = (state: any) => {
+    return state.collectionsByLocation;
+};
+
+export const getTotalCollectionsByLocation = (state: any) => {
+    return state.totalCollectionsByLocation;
+};

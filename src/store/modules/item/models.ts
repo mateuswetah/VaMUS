@@ -14,8 +14,6 @@ export class ItemAttachments {
   }
 }
 
-
-
 export default class ItemModel {
     title: string;
     metadata?: ItemMetadata[];

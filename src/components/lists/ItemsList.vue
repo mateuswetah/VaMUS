@@ -1,5 +1,5 @@
 <template>
-    <ion-item-group>
+    <ion-item-group v-if="totalItems">
         <ion-item-divider>
             <ion-label>Itens</ion-label>
             <ion-note slot="end">{{ totalItems }}</ion-note>
@@ -59,18 +59,23 @@ export default defineComponent({
     },
     props: {
         isCollectionItemsList: Boolean,
+        isItemsByLocationList: Boolean,
         isLoadingItems: Boolean
     },
     computed: {
         items(): Array<ItemModel> {
             if (this.isCollectionItemsList)
                 return this.getCollectionItems();
+            else if (this.isItemsByLocationList)
+                return this.getItemsByLocation();
             else
                 return this.getItems();
         },
         totalItems(): number {
             if (this.isCollectionItemsList)
                 return this.getCollectionTotalItems();
+            else if (this.isItemsByLocationList)
+                return this.getTotalItemsByLocation();
             else
                 return this.getTotalItems();
         }
@@ -81,6 +86,8 @@ export default defineComponent({
             "getTotalItems",
             "getCollectionItems",
             "getCollectionTotalItems",
+            "getItemsByLocation",
+            "getTotalItemsByLocation"
         ])
     }
 });

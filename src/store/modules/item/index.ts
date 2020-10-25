@@ -7,8 +7,10 @@ const state = {
     item: new ItemModel(),
     items: Array<ItemModel>(),
     collectionItems: Array<ItemModel>(),
+    itemsByLocation: Array<ItemModel>(),
     totalItems: 0,
-    totalCollectionItems: 0
+    totalCollectionItems: 0,
+    totalItensByLocation: 0
 };
 
 export default {

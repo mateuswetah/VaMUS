@@ -9,7 +9,9 @@ const state = {
     totalCollections: 0,
     instituteCollections: Array<CollectionModel>(),
     totalInstituteCollections: 0,
-    institutesIds: Array<number>()
+    institutesIds: Array<number>(),
+    collectionsByLocation: Array<CollectionModel>(),
+    totalCollecitonsByLocation: 0
 };
 
 export default {

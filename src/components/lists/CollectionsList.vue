@@ -1,5 +1,5 @@
 <template>
-    <ion-item-group>
+    <ion-item-group v-if="totalCollections">
         <ion-item-divider>
             <ion-label>Coleções</ion-label>
             <ion-note slot="end">{{ totalCollections }}</ion-note>
@@ -67,18 +67,23 @@ export default defineComponent({
     },
     props: {
         isInstituteCollectionsList: Boolean,
+        isCollectionsByLocationList: Boolean,
         isLoadingCollections: Boolean
     },
     computed: {
         collections(): Array<CollectionModel> {
             if (this.isInstituteCollectionsList)
                 return this.getInstituteCollections();
+            else if (this.isCollectionsByLocationList)
+                return this.getCollectionsByLocation()
             else
                 return this.getCollections();
         },
         totalCollections(): number {
             if (this.isInstituteCollectionsList)
                 return this.getInstituteTotalCollections();
+            else if (this.isCollectionsByLocationList)
+                return this.getTotalCollectionsByLocation();
             else
                 return this.getTotalCollections();
         }
@@ -89,6 +94,8 @@ export default defineComponent({
             "getTotalCollections",
             "getInstituteCollections",
             "getInstituteTotalCollections",
+            "getCollectionsByLocation",
+            "getTotalCollectionsByLocation"
         ])
     }
 })

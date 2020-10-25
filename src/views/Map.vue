@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 import {
     IonPage,
     IonHeader,
@@ -84,6 +84,9 @@ export default defineComponent({
         ...mapActions("item", ["fetchItems"]),
         ...mapActions("collection", ["fetchCollections"]),
         ...mapActions("institute", ["fetchInstitutes"]),
+        ...mapMutations("item", ["setItemsByLocation", "setTotalItemsByLocation"]),
+        ...mapMutations("collection", ["setCollectionsByLocation", "setTotalCollectionsByLocation"]),
+        ...mapMutations("institute", ["setInstitutesByLocation", "setTotalInstitutesByLocation"]),
         getIconUrlMarker(type: string) {
             switch (type) {
                 case '001': return 'assets/icon/marker-icon-1.png';
@@ -152,14 +155,8 @@ export default defineComponent({
                         shadowAnchor: [4, 26]
                     });
 
-                    const objects = this.points[i].objects;
-
                     newMarkers.push(L.marker([this.points[i].lat, this.points[i].long], { icon:defaultIcon })
-                        .bindPopup(`
-                            instituição: ${(objects.institutes[0]||[]).name} <br >
-                            Total coleções: ${(objects.collections||[]).length} <br >
-                            Total itens: ${(objects.items||[]).length}
-                        `)
+                        .on('click', (event) => this.openPopover(event, this.points[i].objects))
                     );
                 }
                 
@@ -171,16 +168,19 @@ export default defineComponent({
             }
         },
         ionViewDidEnter() {
-            this.map = L.map("mapId").setView([-15.809365, -49.521065], 5);
+            if (this.map == undefined || !this.map.getContainer()) {
+                this.map = L.map("mapId").setView([-15.809365, -49.521065], 5);
 
-            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                attribution: "Instituições culturais",
-            }).addTo(this.map);
+                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    attribution: "Instituições culturais",
+                }).addTo(this.map);
+            }
 
             this.fetchContent();
         },
         ionViewWillLeave() {
             if (this.map) this.map.remove();
+            this.map = undefined;
         },
         onSearch(ev: CustomEvent) {
             this.searchValue = ev.detail.value;
@@ -215,14 +215,26 @@ export default defineComponent({
                     this.addMakers();
                 });
         },
-        async openPopover(ev: any) {
-            console.log('dgsdf')
+        async openPopover(ev: any, entities: { items: any[]; collections: any[]; institutes: any[] }) {
+            this.setItemsByLocation(entities.items);
+            this.setCollectionsByLocation(entities.collections);
+            this.setInstitutesByLocation(entities.institutes);
+            this.setTotalItemsByLocation(entities.items.length);
+            this.setTotalCollectionsByLocation(entities.collections.length);
+            this.setTotalInstitutesByLocation(entities.institutes.length);
+
             const popover = await popoverController
                 .create({
                     component: MapMarkerPopover,
-                    cssClass: 'my-custom-class',
-                    event: ev,
-                    translucent: true
+                    componentProps:{
+                        onDismissPopover: () => {
+                            popover.dismiss();
+                        }
+                    },
+                    cssClass: 'map-marker-popover',
+                    event: ev.originalEvent,
+                    translucent: true,
+                    showBackdrop: false
                 })
             return popover.present();
         }

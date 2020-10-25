@@ -1,8 +1,8 @@
 <template>
-    <ion-item-group>
+    <ion-item-group v-if="totalInstitutes">
         <ion-item-divider>
             <ion-label>Museus</ion-label>
-            <ion-note slot="end">{{ totalInstitutes}}</ion-note>
+            <ion-note slot="end">{{ totalInstitutes }}</ion-note>
         </ion-item-divider>
 
         <institute-list-item
@@ -51,6 +51,7 @@ import {
     IonItem,
 } from "@ionic/vue";
 import InstituteListItem from '@/components/list-items/InstituteListItem.vue';
+import InstituteModel from '@/store/modules/institute/models';
 
 export default defineComponent({
     name: 'InstitutesList',
@@ -65,13 +66,31 @@ export default defineComponent({
         InstituteListItem
     },
     props: {
-        isLoadingInstitutes: Boolean
+        isLoadingInstitutes: Boolean,
+        isInstitutesByLocationList: Boolean
     },
     computed: {
-        ...mapGetters("institute", {
-            institutes: "getInstitutes",
-            totalInstitutes: "getTotalInstitutes",
-        })
+        institutes(): Array<InstituteModel> {
+            if (this.isInstitutesByLocationList)
+                return this.getInstitutesByLocation();
+            else
+                return this.getInstitutes();
+        },
+        totalInstitutes(): number {
+            if (this.isInstitutesByLocationList)
+                return this.getTotalInstitutesByLocation();
+            else
+                return this.getTotalInstitutes();
+        }
+    },
+    methods: {
+        ...mapGetters("institute", [
+            "getInstitutes",
+            "getTotalInstitutes",
+            "getInstitutesByLocation",
+            "getTotalInstitutesByLocation"
+        ])
     }
 })
+
 </script>
