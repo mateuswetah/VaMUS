@@ -35,7 +35,17 @@ export default defineComponent({
     data(): {
         map: L.Map | undefined;
         searchKey: string;
-        points: {id: number; lat: number; long: number; markerType: string}[];
+        points: {
+            id: number;
+            lat: number;
+            long: number;
+            markerType: string;
+            objects: {
+                institutes: any[];
+                collections: any[];
+                items: any[];
+            };
+        }[];
     } {
         return {
             map: undefined,
@@ -72,7 +82,7 @@ export default defineComponent({
             for (let index = 0; index < (this.institutes||[]).length; index++) {
                 const element = this.institutes[index];
                 const {id, location: {latitude, longitude}} = element;
-                this.points.push({id, lat:latitude, long:longitude, markerType: '001'})
+                this.points.push({id, lat:latitude, long:longitude, markerType: '001', objects: {items:[], collections:[], institutes:[element]}})
             }
 
             for (let index = 0; index < (this.collections||[]).length; index++) {
@@ -83,8 +93,9 @@ export default defineComponent({
                 const current = this.points.find(x => x.id == id);
                 if (current){
                     current.markerType = current.markerType.substring(0,1) + '1' + current.markerType.substring(2);
+                    current.objects.collections.push(element);
                 } else {
-                    this.points.push({id, lat:latitude, long:longitude, markerType: '010'})
+                    this.points.push({id, lat:latitude, long:longitude, markerType: '010', objects: {items:[], collections:[element],institutes:[]}})
                 }
             }
 
@@ -96,8 +107,9 @@ export default defineComponent({
                 const current = this.points.find(x => x.id == id);
                 if (current){
                     current.markerType = '1' + current.markerType.substring(1);
+                    current.objects.items.push(element);
                 } else {
-                    this.points.push({id, lat:latitude, long:longitude, markerType: '100'})
+                    this.points.push({id, lat:latitude, long:longitude, markerType: '100', objects: {items:[element],collections:[],institutes:[]}})
                 }
             }
         },
@@ -120,9 +132,16 @@ export default defineComponent({
                     shadowAnchor: [4, 26]
                 });
 
+                const objects = this.points[i].objects;
+                
+
                 L.marker([this.points[i].lat, this.points[i].long], {icon:defaultIcon})
                 .addTo(this.map)
-                .bindPopup("PopUp")
+                .bindPopup(`
+                    instituição: ${(objects.institutes[0]).name} <br >
+                    Total coleções: ${(objects.collections||[]).length} <br >
+                    Total itens: ${(objects.items||[]).length}
+                `)
             }
         },
         ionViewWillLeave() {
