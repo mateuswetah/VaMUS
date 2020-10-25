@@ -7,11 +7,14 @@
         <ion-grid>
             <ion-row v-if="!isLoadingItems">
                 <ion-col
-                    size="4"
+                    size-xs="4"
+                    size-sm="4"
+                    size-md="3"
+                    size-lg="2"
                     v-for="(item, index) of items"
                     :key="index"
                 >
-                    <router-link :to="'/item/' + item.id">
+                    <ion-card :router-link="'/item/' + item.id">
                         <ion-img
                             v-if="
                                 item.thumbnail &&
@@ -20,8 +23,10 @@
                             "
                             :src="item.thumbnail.thumbnail[0]"
                         />
-                        <ion-label>{{ item.title }}</ion-label>
-                    </router-link>
+                        <ion-card-header>
+                            <ion-card-title>{{ item.title }}</ion-card-title>
+                        </ion-card-header>
+                    </ion-card>
                 </ion-col>
             </ion-row>
             <ion-row v-else>
@@ -48,6 +53,9 @@ import {
     IonCol,
     IonRow,
     IonNote,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle
 } from "@ionic/vue";
 import ItemModel from '@/store/modules/item/models';
 
@@ -63,6 +71,9 @@ export default defineComponent({
         IonCol,
         IonRow,
         IonNote,
+        IonCard,
+        IonCardHeader,
+        IonCardTitle
     },
     props: {
         isCollectionItemsList: Boolean,
@@ -92,3 +103,16 @@ export default defineComponent({
     }
 });
 </script>
+
+<style scoped>
+    ion-card {
+        margin: 0px;
+    }
+    ion-card-header {
+        padding: 10px;
+    }
+    ion-card-title {
+        font-size: 12px;
+        font-weight: normal;
+    }
+</style>

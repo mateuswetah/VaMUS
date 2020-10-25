@@ -1,15 +1,27 @@
 <template>
     <ion-page>
+
         <ion-header :transluscent="true">
             <ion-toolbar>
                 <ion-buttons slot="start">
                     <ion-back-button></ion-back-button>
-                    <ion-title v-if="!isLoadingItem" >{{ item.title ? item.title : 'Item' }}</ion-title>
-                    <ion-skeleton-text v-else animated />
                 </ion-buttons>
+                <ion-title v-if="!isLoadingItem">{{ item.title ? item.title : 'Item' }}</ion-title>
+                <ion-skeleton-text v-else animated />
             </ion-toolbar>
         </ion-header>
         <ion-content :fullscreen="true">
+            <ion-header collapse="condense">
+                <ion-toolbar>
+                    <ion-buttons slot="start">
+                        <ion-back-button></ion-back-button>
+                    </ion-buttons>
+                    <ion-title v-if="!isLoadingItem" size="large">{{ item.title ? item.title : 'Item' }}</ion-title>
+                    <ion-skeleton-text v-else animated />
+                </ion-toolbar>
+            </ion-header>
+
+
             <div>
                 <ion-slides v-if="!isLoadingItem && !isLoadingItemAttachments" pager="true" :options="slideOpts">
                     <ion-slide  v-for="(attachment, index) of (item.attachments||[])" :key="index">
@@ -20,7 +32,8 @@
 
             <ion-card v-if="!isLoadingItem">
                 <ion-card-header>
-                    <ion-card-title>{{ item.title ? item.title : 'Item' }}</ion-card-title>
+                    <ion-card-title v-if="!isLoadingItem">{{ item.title ? item.title : 'Item' }}</ion-card-title>
+                    <ion-skeleton-text v-else animated />
                 </ion-card-header>
 
                 <ion-card-content>
@@ -47,7 +60,6 @@ import {
     IonPage,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
     IonSkeletonText,
     IonButtons,
@@ -68,7 +80,6 @@ export default defineComponent({
         IonPage,
         IonHeader,
         IonToolbar,
-        IonTitle,
         IonContent,
         IonSkeletonText,
         IonButtons,
