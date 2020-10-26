@@ -1,6 +1,12 @@
 <template>
     <ion-header translucent>
         <ion-toolbar>
+            <img 
+                    class="vamus-logo"
+                    alt="VaMUS" 
+                    src="/assets/img/VaMUS_logo.png"/>
+        </ion-toolbar>
+        <ion-toolbar>
             <ion-searchbar
                     :value="searchValue"
                     @ionChange="onSearch"
@@ -22,7 +28,7 @@ import {
     IonHeader,
     IonToolbar,
     IonSearchbar,
-    IonProgressBar,
+    IonProgressBar
 } from "@ionic/vue";
 
 export default defineComponent({
@@ -42,3 +48,13 @@ export default defineComponent({
     }
 })
 </script>
+
+<style scoped>
+ion-toolbar {
+    text-align: center;
+}
+.vamus-logo {
+    width: 80px;
+    margin: 12px auto;
+}
+</style>
