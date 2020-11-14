@@ -7,7 +7,7 @@ export const tainacanApi = axios.create({
 
 // Mapas API Axios
 export const mapasApi = axios.create({
-    baseURL: 'https://museus.cultura.gov.br/api'
+    baseURL: 'https://vamus.tainacan.org/vamus_mapas/api/'
 });
 
 export default { tainacanApi };

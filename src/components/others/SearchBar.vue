@@ -1,10 +1,12 @@
 <template>
     <ion-header translucent>
-        <ion-toolbar>
-            <img 
-                    class="vamus-logo"
-                    alt="VaMUS" 
-                    src="/assets/img/VaMUS_logo.png"/>
+        <ion-toolbar id="main-toolbar">
+            <div class="toolbar-background">
+                <img 
+                        class="vamus-logo"
+                        alt="VaMUS" 
+                        src="/assets/img/VaMUS_logo.png"/>
+            </div>
         </ion-toolbar>
         <ion-toolbar>
             <ion-searchbar
@@ -49,9 +51,23 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style>
+.header-md::after {
+    background-image: none;
+}
 ion-toolbar {
     text-align: center;
+    --background: #f5f5f5;
+}
+.sc-ion-searchbar-md-h {
+    --box-shadow: 0 2px 12px -6px #4834d4;
+    --border-radius: 24px;
+}
+ion-toolbar#main-toolbar .toolbar-background {
+    background: radial-gradient(#4834d4, #22a6b3) no-repeat border-box, #f5f5f5;
+    background-size: 100% 64px, 100% 64px;
+    background-position: 0 0, 0 64px;
+    background-origin: padding-box, padding-box;
 }
 .vamus-logo {
     width: 80px;

@@ -13,7 +13,7 @@
                         <ion-label>Coleções <span v-if="!isNaN(totalCollections)">({{ totalCollections }})</span></ion-label>
                     </ion-segment-button>
                     <ion-segment-button value="institutes">
-                        <ion-label>Institutes <span v-if="!isNaN(totalInstitutes)">({{ totalInstitutes }})</span></ion-label>
+                        <ion-label>Museus <span v-if="!isNaN(totalInstitutes)">({{ totalInstitutes }})</span></ion-label>
                     </ion-segment-button>
                 </ion-segment>
 
@@ -129,3 +129,9 @@ export default defineComponent({
     },
 });
 </script>
+
+<style>
+ion-list {
+    --ion-item-background: #f5f5f5;
+}
+</style>
