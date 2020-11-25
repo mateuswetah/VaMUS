@@ -1,6 +1,6 @@
 <template>
   <ion-content class="ion-padding">
-    <ion-list>
+    <ion-list lines="none">
           
           <items-list is-items-by-location-list :is-loading-items="isLoadingItems" />
 

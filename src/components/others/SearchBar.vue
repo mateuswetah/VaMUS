@@ -8,7 +8,7 @@
                         src="/assets/img/VaMUS_logo.png"/>
             </div>
         </ion-toolbar>
-        <ion-toolbar>
+        <ion-toolbar style="padding: 16px">
             <ion-searchbar
                     :value="searchValue"
                     @ionChange="onSearch"

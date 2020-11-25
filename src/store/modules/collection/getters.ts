@@ -2,6 +2,10 @@ export const getCollection = (state: any) => {
     return state.collection;
 }
 
+export const getCollectionBasics = (state: any) => {
+    return state.collectionBasics;
+}
+
 export const getCollections = (state: any) => {
     return state.collections;
 }

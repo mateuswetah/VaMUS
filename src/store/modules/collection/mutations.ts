@@ -4,6 +4,10 @@ export const setCollection = (state: any, collection: CollectionModel ) => {
     state.collection = collection;
 }
 
+export const setCollectionBasics = (state: any, collectionBasics: CollectionModel ) => {
+    state.collectionBasics = collectionBasics;
+}
+
 export const setCollections = (state: any, collections: [] ) => {
     state.collections = collections;
 }

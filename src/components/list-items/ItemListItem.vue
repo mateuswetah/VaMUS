@@ -40,12 +40,15 @@ export default defineComponent({
 <style scoped>
     ion-card {
         margin: 0px;
+        border-radius: 14px;
+        box-shadow: none;
+        background: white;
+        height: 100%;
     }
     ion-card-header {
         padding: 10px;
     }
     ion-card-title {
         font-size: 12px;
-        font-weight: normal;
     }
 </style>

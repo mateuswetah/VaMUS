@@ -21,6 +21,25 @@ export const fetchCollection = ({ commit }: any, collectionId: string) => {
     });
 };
 
+export const fetchCollectionBasics = ({ commit }: any, collectionId: string) => {
+    return new Promise((resolve, reject) => { 
+        const endpoint = '/collections/' + collectionId + '?fetch_only=name';
+
+        tainacanApi.get(endpoint)
+            .then(res => {
+                const collection = res.data;
+
+                commit('setCollectionBasics', collection);
+
+                resolve({ collection });
+            }) 
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
+    });
+};
+
 export const fetchCollections = ({ commit }: any, params: any) => {
     return new Promise((resolve, reject) => { 
         const endpoint = '/collections?'

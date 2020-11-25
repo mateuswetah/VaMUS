@@ -1,24 +1,14 @@
 <template>
     <ion-page>
-        <ion-header :transluscent="true">
+        <ion-header>
             <ion-toolbar>
                 <ion-buttons slot="start">
                     <ion-back-button></ion-back-button>
                 </ion-buttons>
-                <ion-title v-if="!isLoadingCollection">{{ collection.name ? collection.name : 'Coleção' }}</ion-title>
-                <ion-skeleton-text v-else animated />
             </ion-toolbar>
         </ion-header>
+
         <ion-content :fullscreen="true">
-            <ion-header collapse="condense">
-                <ion-toolbar>
-                    <ion-buttons slot="start">
-                        <ion-back-button></ion-back-button>
-                    </ion-buttons>
-                    <ion-title v-if="!isLoadingCollection" size="large">{{ collection.name ? collection.name : 'Coleção' }}</ion-title>
-                    <ion-skeleton-text v-else animated />
-                </ion-toolbar>
-            </ion-header>
 
             <ion-img
                 v-if="
@@ -29,7 +19,15 @@
                 :src="collection.thumbnail['tainacan-medium'][0]"
             />
             
-            <div>
+            
+            <div class="page-contents" v-if="!isLoadingCollection">
+                <ion-text>
+                    <h1>{{ collection.name ? collection.name : 'Coleção' }}</h1>
+                </ion-text>
+                <ion-text>
+                    <p class="page-contents__institute">Instituto:&nbsp;<router-link :to="'/institute/' + collection.vamus_institute_identifier_collection "><strong>{{ collection.vamus_institute_name_collection ? collection.vamus_institute_name_collection : '' }}</strong></router-link></p>
+                </ion-text>
+
                 <ion-segment :value="currentSegment" @ionChange="segmentChanged($event)">
                     <ion-segment-button value="info">
                         <ion-label>Info</ion-label>
@@ -61,15 +59,14 @@ import {
     IonPage,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
-    IonSkeletonText,
     IonButtons,
     IonBackButton,
     IonSegment,
     IonSegmentButton,
     IonLabel,
     IonList,
+    IonText,
     IonImg
 } from "@ionic/vue";
 import ItemsList from '@/components/lists/ItemsList.vue'
@@ -80,15 +77,14 @@ export default defineComponent({
         IonPage,
         IonHeader,
         IonToolbar,
-        IonTitle,
         IonContent,
-        IonSkeletonText,
         IonButtons,
         IonBackButton,
         IonSegment,
         IonSegmentButton,
         IonLabel,
         IonList,
+        IonText,
         IonImg,
         ItemsList
     },
@@ -131,3 +127,22 @@ export default defineComponent({
     },
 });
 </script>
+
+<style scoped>
+    ion-toolbar {
+        position: absolute;
+        --background: transparent;
+    }
+    .page-contents h1 {
+        padding: 0 1rem;
+    }
+    ion-list,
+    ion-item-group {
+        --ion-background-color: var(--background, #f2f2f2);
+    }
+    .page-contents__institute {
+        padding: 0 1rem;
+        font-size: 0.875rem;
+        color: var(--ion-color-dark-tint, #383a3e);
+    }
+</style>

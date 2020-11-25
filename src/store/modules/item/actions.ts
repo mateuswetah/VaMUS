@@ -124,7 +124,6 @@ export const fetchInstituteItems = ({ commit }: any, {instituteId, params}: {ins
                     tainacanApi.get(endpointItems + stringify(queryItemParams)).then(resItems => {
                         const items = resItems.data.items;
                         const totalItems = resItems.headers['x-wp-total'];
-                        console.log("items", items);
                         commit('setInstituteItems', items);
                         commit('setInstituteTotalItems', totalItems);
                         resolve({ items, totalItems });

@@ -4,6 +4,7 @@ import * as mutations from './mutations';
 import CollectionModel from './models';
 
 const state = {
+    collectionBasics: new CollectionModel(),
     collection: new CollectionModel(),
     collections: Array<CollectionModel>(),
     totalCollections: 0,

@@ -1,33 +1,27 @@
 <template>
     <ion-page>
-        <ion-header :transluscent="true">
-            <ion-toolbar>
+        <ion-header>
+            <ion-toolbar :style="{ position: institute['@files:header']?.url ? 'absolute' : '' }">
                 <ion-buttons slot="start">
                     <ion-back-button></ion-back-button>
                 </ion-buttons>
-                <ion-title v-if="!isLoadingInstitute">
-                    {{ institute.name ? institute.name : 'Instituição' }}
-                </ion-title>
-                <ion-skeleton-text v-else animated />
             </ion-toolbar>
         </ion-header>
         <ion-content :fullscreen="true">
-            <ion-header collapse="condense">
-                <ion-toolbar>
-                    <ion-buttons slot="start">
-                        <ion-back-button></ion-back-button>
-                    </ion-buttons>
-                    <ion-title v-if="!isLoadingInstitute" size="large">{{ 'Instituição' }}</ion-title>
-                    <ion-skeleton-text v-else animated />
-                </ion-toolbar>
-            </ion-header>
 
             <ion-img
                 v-if="institute['@files:header']?.url"
                 :src="institute['@files:header']?.url"
             />
 
-            <div>
+            <div 
+                    class="page-contents"
+                    v-if="!isLoadingInstitute">
+
+                <ion-text>
+                    <h1>{{ institute.name ? institute.name : 'Instituição' }}</h1>
+                </ion-text>
+
                 <ion-segment :value="currentSegment" @ionChange="segmentChanged($event)">
                     <ion-segment-button value="about">
                         <ion-label>Sobre</ion-label>
@@ -159,9 +153,7 @@ import {
     IonPage,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
-    IonSkeletonText,
     IonButtons,
     IonBackButton,
     IonSegment,
@@ -181,9 +173,7 @@ export default defineComponent({
         IonPage,
         IonHeader,
         IonToolbar,
-        IonTitle,
         IonContent,
-        IonSkeletonText,
         IonButtons,
         IonBackButton,
         IonSegment,
@@ -253,3 +243,17 @@ export default defineComponent({
     },
 });
 </script>
+
+
+<style scoped>
+    ion-toolbar {
+        --background: transparent;
+        top: 0px;
+    }
+    .page-contents h1 {
+        padding: 0 1rem;
+    }
+    ion-item-group {
+        --ion-background-color: var(--background, #f2f2f2);
+    }
+</style>
