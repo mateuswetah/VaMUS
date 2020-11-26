@@ -1,9 +1,9 @@
 <template>
     <ion-page>
         <ion-header>
-            <ion-toolbar :style="{ position: institute['@files:header']?.url ? 'absolute' : '' }">
+            <ion-toolbar :style="{ position: institute['@files:header']?.url ? 'absolute' : '', backgroundColor: !institute['@files:header']?.url ? '#f2f2f2' : '' }">
                 <ion-buttons slot="start">
-                    <ion-back-button></ion-back-button>
+                    <ion-back-button color="primary"></ion-back-button>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>

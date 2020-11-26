@@ -1,4 +1,5 @@
 import { mapasApi } from '../../axios'
+import InstituteModel from './models';
 
 export const fetchInstituteAbout = ({ commit }: any, instituteId: string) => new Promise((resolve, reject) => {
     const fields = [
@@ -27,6 +28,12 @@ export const fetchInstituteAbout = ({ commit }: any, instituteId: string) => new
     mapasApi.get(endpoint).then(res => {
         const institute = (Array.isArray(res.data) ? res.data[0] : res.data);
         Object.keys(institute).forEach(e => { if( !['@files:avatar', '@files:header'].includes(e) && !fields.includes(e)) delete institute[e]} )
+
+        if (institute['@files:avatar'] && institute['@files:avatar']['url'])
+            institute['@files:avatar']['url'] = institute['@files:avatar']['url'].replace('https://museus.cultura.gov.br', 'https://vamus.tainacan.org/vamus_mapas');
+        if (institute['@files:header'] && institute['@files:header']['url'])
+            institute['@files:header']['url'] = institute['@files:header']['url'].replace('https://museus.cultura.gov.br', 'https://vamus.tainacan.org/vamus_mapas');
+            
         commit('setInstitute', institute);
         resolve({institute});
     }).catch(error => {
@@ -71,7 +78,12 @@ export const fetchInstitutes = ({ commit, rootGetters }: any, { search }: { sear
             .then(res => {
                 const institutes = res.data;
                 const totalInstitutes = ids.size;
-
+                institutes.forEach((institute: InstituteModel) => {
+                    if (institute['@files:avatar'] && institute['@files:avatar']['url'])
+                        institute['@files:avatar']['url'] = institute['@files:avatar']['url'].replace('https://museus.cultura.gov.br', 'https://vamus.tainacan.org/vamus_mapas');
+                    if (institute['@files:header'] && institute['@files:header']['url'])
+                        institute['@files:header']['url'] = institute['@files:header']['url'].replace('https://museus.cultura.gov.br', 'https://vamus.tainacan.org/vamus_mapas');
+                });
                 commit('setInstitutes', institutes);
                 commit('setTotalInstitutes', totalInstitutes);
 
